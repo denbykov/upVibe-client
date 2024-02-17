@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+class FilesPage extends StatefulWidget {
+  const FilesPage({super.key});
 
-  final String title = 'Settings';
+  final String title = 'Files';
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<FilesPage> createState() => _FilesPageState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _FilesPageState extends State<FilesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +26,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Add',
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../screens/files.dart';
-import '../screens/settings.dart';
+// import '../pages/files.dart';
+// import '../pages/settings.dart';
 
-class AppDrawer extends Drawer {
-  const AppDrawer({super.key});
+class HomeDrawerWidget extends Drawer {
+  const HomeDrawerWidget({super.key});
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -20,19 +20,19 @@ class AppDrawer extends Drawer {
           ListTile(
             title: const Text('Files'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const FilesScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const FilesPage()),
+              // );
             },
           ),
           ListTile(
             title: const Text('Settings'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const SettingsPage()),
+              // );
             },
           ),
         ],
