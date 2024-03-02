@@ -1,5 +1,7 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
 
+import 'package:client/exceptions/login_failure.dart';
+
 const appScheme = 'flutterdemo';
 
 class AuthorizationRemoteDatasource {
@@ -11,9 +13,13 @@ class AuthorizationRemoteDatasource {
   }
 
   Future<void> login() async {
-    _credentials = await _auth0
-        .webAuthentication(scheme: appScheme)
-        .login(audience: 'volodymyr-test-null');
+    try {
+      _credentials = await _auth0
+          .webAuthentication(scheme: appScheme)
+          .login(audience: 'volodymyr-test-null');
+    } on WebAuthenticationException catch (ex) {
+      throw LoginFailure();
+    }
   }
 
   Future<void> logout() async {

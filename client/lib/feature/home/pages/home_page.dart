@@ -1,4 +1,5 @@
 import 'package:client/feature/home/controllers/home_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -47,26 +48,52 @@ class HomePage extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(_title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Text(
-              //   'Not yet implemented...',
-              // ),
-              Obx(() => Text("${_controller.count}")),
-            ],
+    ever(_controller.showSnackBar, (showSnackBar) {
+      if (showSnackBar) {
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Titule',
+            message: 'User Registered Successfully',
+            icon: const Icon(Icons.refresh),
+            duration: const Duration(seconds: 3),
           ),
+        );
+      }
+    });
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(_title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Text(
+            //   'Not yet implemented...',
+            // ),
+            Obx(() => Text("${_controller.showSnackBar}")),
+            // Text(
+            //   'Not yet implemented...',
+            // ),
+            // Obx(() => Text("${_controller.count}")),
+            ElevatedButton(
+              onPressed: () async {
+                await _controller.login();
+              },
+              style: ElevatedButton.styleFrom(
+                  textStyle: const TextStyle(color: Colors.white)),
+              child: const Text('Login'),
+            )
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _controller.increment,
-          tooltip: 'Add',
-          child: const Icon(Icons.add),
-        ));
+      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _controller.increment,
+      //   tooltip: 'Add',
+      //   child: const Icon(Icons.add),
+      // )
+    );
   }
 }
