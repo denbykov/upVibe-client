@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 
 import 'pages.dart';
 import 'routes.dart';
-// import 'bindings/home_binding.dart';
-
-// import '../feature/home/pages/home_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -21,7 +18,7 @@ class App extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: Routes.home,
+      initialRoute: Routes.login,
       getPages: Pages.pages,
     );
   }

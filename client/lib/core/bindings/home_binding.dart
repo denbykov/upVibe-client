@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
-import 'package:client/feature/home/controllers/home_controller.dart';
+import 'package:client/feature/home/controllers/login_controller.dart';
+import 'package:client/feature/controllers/snack_bar_controller.dart';
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/use_cases/login_use_case.dart';
 import 'package:client/data/repositories/authorization_repository_impl.dart';
@@ -13,6 +14,8 @@ class HomeBinding implements Bindings {
         () => AuthorizationRemoteDatasource());
     Get.lazyPut<AuthorizationRepository>(() => AuthorizationRepositoryImpl());
     Get.lazyPut<LoginUseCase>(() => LoginUseCase());
-    Get.lazyPut<HomeController>(() => HomeController());
+
+    Get.lazyPut<SnackBarController>(() => SnackBarController());
+    Get.lazyPut<LoginController>(() => LoginController());
   }
 }
