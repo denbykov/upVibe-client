@@ -6,17 +6,18 @@ const appScheme = 'flutterdemo';
 
 class AuthorizationRemoteDatasource {
   late Auth0 _auth0;
-  Credentials? _credentials;
 
   AuthorizationRemoteDatasource() {
     _auth0 = Auth0('up-vibe.eu.auth0.com', 'NsrwVzfSOpezBAZAwn10LytMShLlpKlf');
   }
 
-  Future<void> login() async {
+  Future<String> login() async {
     try {
-      _credentials = await _auth0
+      var credentials = await _auth0
           .webAuthentication(scheme: appScheme)
           .login(audience: 'volodymyr-test-null');
+
+      return credentials.accessToken;
     } on WebAuthenticationException catch (ex) {
       throw LoginFailure();
     }
