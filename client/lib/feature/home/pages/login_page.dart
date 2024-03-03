@@ -6,7 +6,7 @@ import 'package:client/feature/widgets/app_snack_bar.dart';
 
 class LoginPage extends StatelessWidget {
   final LoginController _controller = Get.find<LoginController>();
-  final String _title = "Events";
+  final String _title = 'Login';
 
   LoginPage({super.key}) {
     AppSnackBar();
