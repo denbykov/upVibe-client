@@ -18,7 +18,7 @@ class App extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: Routes.login,
+      initialRoute: Routes.splashScreen,
       getPages: Pages.pages,
     );
   }

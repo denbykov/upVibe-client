@@ -5,9 +5,15 @@ import 'bindings/home_binding.dart';
 import 'routes.dart';
 
 import '../feature/home/pages/login_page.dart';
+import '../feature/home/pages/splash_screen_page.dart';
 
 class Pages {
   static final List<GetPage> pages = [
+    GetPage(
+      name: Routes.splashScreen,
+      page: () => SplashScreenPage(),
+      binding: HomeBinding(),
+    ),
     GetPage(
       name: Routes.login,
       page: () => LoginPage(),
