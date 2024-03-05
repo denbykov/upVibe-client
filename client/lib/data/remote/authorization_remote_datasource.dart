@@ -18,7 +18,7 @@ class AuthorizationRemoteDatasource {
           .login(audience: 'volodymyr-test-null');
 
       return credentials.accessToken;
-    } on WebAuthenticationException catch (ex) {
+    } on WebAuthenticationException {
       throw LoginFailure();
     }
   }
