@@ -4,6 +4,8 @@ import 'package:client/data/remote/upvibe_remote_datasource.dart';
 import 'package:client/data/local/storage_local_datasource.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:dio/dio.dart';
+
 import 'package:get/get.dart';
 
 class AuthorizationRepositoryImpl extends AuthorizationRepository {
@@ -26,15 +28,23 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
       var token = _storageDatasource.getDebugAccessToken();
       // ToDo: Remove this print
       print(token);
+
       if (token != null) {
-        _upvibeDatasource.setAccessToken(token);
-        await _upvibeDatasource.testConnection();
-      } else {
-        var token = await _authDatasource.login();
-        _upvibeDatasource.setAccessToken(token);
-        await _upvibeDatasource.testConnection();
-        await _storageDatasource.storeDebugAccessToken(token);
+        try {
+          _upvibeDatasource.setAccessToken(token);
+          await _upvibeDatasource.testConnection();
+          return;
+        } on DioException catch (ex) {
+          if (ex.type != DioExceptionType.badResponse) {
+            rethrow;
+          }
+        }
       }
+
+      token = await _authDatasource.login();
+      _upvibeDatasource.setAccessToken(token);
+      await _upvibeDatasource.testConnection();
+      await _storageDatasource.storeDebugAccessToken(token);
     }
   }
 
