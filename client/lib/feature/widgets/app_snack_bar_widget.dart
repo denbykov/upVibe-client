@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 
 import 'package:client/feature/controllers/snack_bar_controller.dart';
 
-class AppSnackBar {
+class AppSnackBarWidget {
   final SnackBarController _controller = Get.find<SnackBarController>();
 
-  AppSnackBar() {
+  AppSnackBarWidget() {
     ever(_controller.display, (display) {
       if (display) {
         Get.showSnackbar(

@@ -1,8 +1,11 @@
 import 'package:get/get.dart';
 
+import 'package:client/feature/controllers/snack_bar_controller.dart';
+
 import 'package:client/feature/home/controllers/splash_screen_controller.dart';
 import 'package:client/feature/home/controllers/login_controller.dart';
-import 'package:client/feature/controllers/snack_bar_controller.dart';
+import 'package:client/feature/home/controllers/home_drawer_controller.dart';
+import 'package:client/feature/home/controllers/settings_controller.dart';
 
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
@@ -43,5 +46,7 @@ class HomeBinding implements Bindings {
     Get.lazyPut<SplashScreenController>(() => SplashScreenController());
     Get.lazyPut<SnackBarController>(() => SnackBarController());
     Get.lazyPut<LoginController>(() => LoginController());
+    Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());
+    Get.putAsync<SettingsController>(() => SettingsController().init());
   }
 }

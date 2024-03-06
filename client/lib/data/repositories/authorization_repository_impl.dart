@@ -24,6 +24,8 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
       await _upvibeDatasource.testConnection();
     } else {
       var token = _storageDatasource.getDebugAccessToken();
+      // ToDo: Remove this print
+      print(token);
       if (token != null) {
         _upvibeDatasource.setAccessToken(token);
         await _upvibeDatasource.testConnection();

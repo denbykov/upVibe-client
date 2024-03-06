@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:client/feature/home/controllers/login_controller.dart';
-import 'package:client/feature/widgets/app_snack_bar.dart';
+import 'package:client/feature/widgets/app_snack_bar_widget.dart';
 
 class LoginPage extends StatelessWidget {
   final LoginController _controller = Get.find<LoginController>();
   final String _title = 'Login';
 
   LoginPage({super.key}) {
-    AppSnackBar();
+    AppSnackBarWidget();
   }
 
   @override

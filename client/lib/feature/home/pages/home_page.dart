@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
+
+import 'package:client/feature/home/widgets/home_drawer_widget.dart';
 
 class HomePage extends StatelessWidget {
   final String _title = 'Home';
@@ -28,7 +30,7 @@ class HomePage extends StatelessWidget {
         tooltip: 'Add',
         child: const Icon(Icons.add),
       ),
-      // drawer: const HomeDrawerWidget(),
+      drawer: HomeDrawerWidget(),
     );
   }
 }

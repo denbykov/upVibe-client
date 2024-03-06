@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-// import '../pages/files.dart';
-// import '../pages/settings.dart';
+import 'package:client/feature/home/controllers/home_drawer_controller.dart';
 
 class HomeDrawerWidget extends Drawer {
-  const HomeDrawerWidget({super.key});
+  final HomeDrawerController _controller = Get.find<HomeDrawerController>();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      shape: const ContinuousRectangleBorder(),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -18,21 +20,10 @@ class HomeDrawerWidget extends Drawer {
             child: const Text('UpVibe'),
           ),
           ListTile(
-            title: const Text('Files'),
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const FilesPage()),
-              // );
-            },
-          ),
-          ListTile(
+            leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const SettingsPage()),
-              // );
+              _controller.navigateToSettings();
             },
           ),
         ],
