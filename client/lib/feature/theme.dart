@@ -1,31 +1,73 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
-ThemeData get themeData {
-  const int primaryColor = 0xFFC0000A;
-  const int secondaryColor = 0xFF775652;
-  const int tertiaryColor = 0xFF705C2E;
-  const int neutralColor = 0xFF998e8d;
-  const int neutralVariantColor = 0xFFA08C89;
+const lightColorScheme = ColorScheme(
+  brightness: Brightness.light,
+  primary: Color(0xFFBE003E),
+  onPrimary: Color(0xFFFFFFFF),
+  primaryContainer: Color(0xFFFFDADB),
+  onPrimaryContainer: Color(0xFF40000F),
+  secondary: Color(0xFF765658),
+  onSecondary: Color(0xFFFFFFFF),
+  secondaryContainer: Color(0xFFFFDADB),
+  onSecondaryContainer: Color(0xFF2C1517),
+  tertiary: Color(0xFF775930),
+  onTertiary: Color(0xFFFFFFFF),
+  tertiaryContainer: Color(0xFFFFDDB5),
+  onTertiaryContainer: Color(0xFF2A1800),
+  error: Color(0xFFBA1A1A),
+  errorContainer: Color(0xFFFFDAD6),
+  onError: Color(0xFFFFFFFF),
+  onErrorContainer: Color(0xFF410002),
+  background: Color(0xFFFFFBFF),
+  onBackground: Color(0xFF201A1A),
+  surface: Color(0xFFFFFBFF),
+  onSurface: Color(0xFF201A1A),
+  surfaceVariant: Color(0xFFF4DDDE),
+  onSurfaceVariant: Color(0xFF524344),
+  outline: Color(0xFF857374),
+  onInverseSurface: Color(0xFFFBEEEE),
+  inverseSurface: Color(0xFF362F2F),
+  inversePrimary: Color(0xFFFFB2B8),
+  shadow: Color(0xFF000000),
+  surfaceTint: Color(0xFFBE003E),
+  outlineVariant: Color(0xFFD7C1C2),
+  scrim: Color(0xFF000000),
+);
 
-  List<int> colors = <int>[
-    ...toTonalPalette(primaryColor).asList,
-    ...toTonalPalette(secondaryColor).asList,
-    ...toTonalPalette(tertiaryColor).asList,
-    ...toTonalPalette(neutralColor).asList,
-    ...toTonalPalette(neutralVariantColor).asList,
-  ].toList();
-
-  ColorScheme colorScheme =
-      CorePaletteToColorScheme(CorePalette.fromList(colors))
-          .toColorScheme(brightness: Brightness.dark);
-
-  return ThemeData(
-    useMaterial3: true,
-    colorScheme: colorScheme,
-  );
-}
+const darkColorScheme = ColorScheme(
+  brightness: Brightness.dark,
+  primary: Color(0xFFFFB2B8),
+  onPrimary: Color(0xFF67001E),
+  primaryContainer: Color(0xFF91002D),
+  onPrimaryContainer: Color(0xFFFFDADB),
+  secondary: Color(0xFFE5BDBF),
+  onSecondary: Color(0xFF44292B),
+  secondaryContainer: Color(0xFF5C3F41),
+  onSecondaryContainer: Color(0xFFFFDADB),
+  tertiary: Color(0xFFE8C08E),
+  onTertiary: Color(0xFF442B06),
+  tertiaryContainer: Color(0xFF5D411B),
+  onTertiaryContainer: Color(0xFFFFDDB5),
+  error: Color(0xFFFFB4AB),
+  errorContainer: Color(0xFF93000A),
+  onError: Color(0xFF690005),
+  onErrorContainer: Color(0xFFFFDAD6),
+  background: Color(0xFF201A1A),
+  onBackground: Color(0xFFECE0DF),
+  surface: Color(0xFF201A1A),
+  onSurface: Color(0xFFECE0DF),
+  surfaceVariant: Color(0xFF524344),
+  onSurfaceVariant: Color(0xFFD7C1C2),
+  outline: Color(0xFF9F8C8D),
+  onInverseSurface: Color(0xFF201A1A),
+  inverseSurface: Color(0xFFECE0DF),
+  inversePrimary: Color(0xFFBE003E),
+  shadow: Color(0xFF000000),
+  surfaceTint: Color(0xFFFFB2B8),
+  outlineVariant: Color(0xFF524344),
+  scrim: Color(0xFF000000),
+);
 
 TonalPalette toTonalPalette(int value) {
   final color = Hct.fromInt(value);

@@ -6,6 +6,8 @@ import 'package:client/feature/home/controllers/splash_screen_controller.dart';
 import 'package:client/feature/home/controllers/login_controller.dart';
 import 'package:client/feature/home/controllers/home_drawer_controller.dart';
 import 'package:client/feature/home/controllers/settings_controller.dart';
+import 'package:client/feature/home/controllers/home_controller.dart';
+import 'package:client/feature/home/controllers/add_controller.dart';
 
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
@@ -47,6 +49,8 @@ class HomeBinding implements Bindings {
     Get.lazyPut<SnackBarController>(() => SnackBarController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());
+    Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<SettingsController>(() => SettingsController());
+    Get.lazyPut<AddController>(() => AddController());
   }
 }

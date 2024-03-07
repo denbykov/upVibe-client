@@ -15,9 +15,15 @@ class HomeDrawerWidget extends Drawer {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.primary,
             ),
-            child: const Text('UpVibe'),
+            child: Text(
+              'UpVibe',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.settings),
