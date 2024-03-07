@@ -47,6 +47,6 @@ class HomeBinding implements Bindings {
     Get.lazyPut<SnackBarController>(() => SnackBarController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());
-    Get.putAsync<SettingsController>(() => SettingsController().init());
+    Get.lazyPut<SettingsController>(() => SettingsController());
   }
 }

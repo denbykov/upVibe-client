@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:client/feature/theme.dart';
+
 import 'pages.dart';
 import 'routes.dart';
 
@@ -11,13 +13,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.pink,
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
+      theme: themeData,
       initialRoute: Routes.splashScreen,
       getPages: Pages.pages,
     );

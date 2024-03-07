@@ -8,9 +8,9 @@ class SettingsController extends GetxController {
   final StorageRepository _storageRepository = Get.find<StorageRepository>();
   final SnackBarController _snackBarController = Get.find<SnackBarController>();
 
-  late String version;
+  Rx<String> version = ''.obs;
 
-  Future<SettingsController> init() async {
-    return this;
+  SettingsController() {
+    version.value = _storageRepository.getAppVersion();
   }
 }

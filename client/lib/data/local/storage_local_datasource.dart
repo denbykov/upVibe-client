@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,18 +8,15 @@ class Preferences {
 
 class StorageLocalDatasource {
   late SharedPreferences _prefs;
+  late PackageInfo _packageInfo;
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
+    _packageInfo = await PackageInfo.fromPlatform();
+  }
 
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    String appName = packageInfo.appName;
-    String packageName = packageInfo.packageName;
-    String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-
-    debugPrint('$appName $packageName $version $buildNumber');
+  String getAppVesrion() {
+    return _packageInfo.version;
   }
 
   Future<void> storeDebugAccessToken(String token) async {
