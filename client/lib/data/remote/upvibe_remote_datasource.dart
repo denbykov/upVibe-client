@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:client/data/dto/file_dto.dart';
 import 'package:dio/dio.dart';
 
 import 'package:client/exceptions/login_failure.dart';
@@ -31,6 +32,17 @@ class UpvibeRemoteDatasource {
       if (response.statusCode != 200) {
         throw LoginFailure();
       }
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      rethrow;
+    }
+  }
+
+  Future<FileDTO> addFile(String url) async {
+    try {
+      var response = await dio.post('v1/files', data: {'url': url});
+      var json = response.data;
+      return FileDTO.fromJson(json);
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
       rethrow;

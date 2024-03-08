@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// import 'package:client/feature/home/controllers/settings_controller.dart';
+import 'package:client/feature/file/controllers/add_file_controller.dart';
 import 'package:client/feature/widgets/app_snack_bar_widget.dart';
 import 'package:client/feature/widgets/app_scaffold.dart';
 
 class AddFilePage extends StatelessWidget {
-  // final SettingsController _controller = Get.find<SettingsController>();
+  final AddFileController _controller = Get.find<AddFileController>();
   final String _title = 'Add File';
 
   AddFilePage({super.key}) {
@@ -22,7 +22,10 @@ class AddFilePage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: TextFormField(
               decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Paste url'),
+                border: UnderlineInputBorder(),
+                labelText: 'Paste url',
+              ),
+              controller: _controller.urlFieldController,
             ),
           ),
         ),
@@ -46,7 +49,7 @@ class AddFilePage extends StatelessWidget {
       body: buildContent(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // _controller.navigateToAdd();
+          _controller.addFile();
         },
         tooltip: 'Add',
         child: const Icon(Icons.arrow_forward),

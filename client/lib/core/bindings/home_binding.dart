@@ -9,13 +9,17 @@ import 'package:client/feature/home/controllers/settings_controller.dart';
 import 'package:client/feature/home/controllers/home_controller.dart';
 import 'package:client/feature/home/controllers/add_controller.dart';
 
+import 'package:client/feature/file/controllers/add_file_controller.dart';
+
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
+import 'package:client/domain/repositories/file_repository.dart';
 
 import 'package:client/domain/use_cases/login_use_case.dart';
 
 import 'package:client/data/repositories/authorization_repository_impl.dart';
 import 'package:client/data/repositories/storage_repository_impl.dart';
+import 'package:client/data/repositories/file_repository_impl.dart';
 
 import 'package:client/data/local/storage_local_datasource.dart';
 
@@ -42,6 +46,7 @@ class HomeBinding implements Bindings {
 
     Get.lazyPut<AuthorizationRepository>(() => AuthorizationRepositoryImpl());
     Get.lazyPut<StorageRepository>(() => StorageRepositoryImpl());
+    Get.lazyPut<FileRepository>(() => FileRepositoryImpl());
 
     Get.lazyPut<LoginUseCase>(() => LoginUseCase());
 
@@ -52,5 +57,7 @@ class HomeBinding implements Bindings {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<SettingsController>(() => SettingsController());
     Get.lazyPut<AddController>(() => AddController());
+
+    Get.lazyPut<AddFileController>(() => AddFileController());
   }
 }
