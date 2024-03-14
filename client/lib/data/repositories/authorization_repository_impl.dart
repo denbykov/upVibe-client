@@ -26,13 +26,12 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
       await _upvibeDatasource.testConnection();
     } else {
       var token = _storageDatasource.getDebugAccessToken();
-      // ToDo: Remove this print
-      print(token);
 
       if (token != null) {
         try {
           _upvibeDatasource.setAccessToken(token);
           await _upvibeDatasource.testConnection();
+          debugPrint(token);
           return;
         } on DioException catch (ex) {
           if (ex.type != DioExceptionType.badResponse) {
@@ -42,6 +41,7 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
       }
 
       token = await _authDatasource.login();
+      debugPrint(token);
       _upvibeDatasource.setAccessToken(token);
       await _upvibeDatasource.testConnection();
       await _storageDatasource.storeDebugAccessToken(token);
