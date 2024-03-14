@@ -2,8 +2,6 @@ import 'package:client/domain/repositories/file_repository.dart';
 
 import 'package:client/data/remote/upvibe_remote_datasource.dart';
 import 'package:client/data/local/storage_local_datasource.dart';
-import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
 
 import 'package:get/get.dart';
 

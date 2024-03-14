@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:client/feature/theme.dart';
-import 'package:flutter/scheduler.dart';
 
 class AppScaffold extends StatelessWidget {
   final String title;
