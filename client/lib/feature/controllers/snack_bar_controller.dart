@@ -1,22 +1,16 @@
 import 'package:get/get.dart';
 
 class SnackBarController extends GetxController {
-  final Rx<bool> display = false.obs;
-  String title = '';
-  String message = '';
   final int duration = 3;
 
+  Function(String, int)? _onError;
+
   void showError(String message) {
-    title = "Error";
-    this.message = message;
+    // "Error"
+    _onError!(message, duration);
+  }
 
-    display.value = true;
-
-    Future.delayed(Duration(seconds: duration), () {
-      title = '';
-      this.message = '';
-
-      display.value = false;
-    });
+  registerOnErrorCallback(Function(String, int) callback) {
+    _onError = callback;
   }
 }

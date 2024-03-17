@@ -5,8 +5,26 @@ import 'package:dio/dio.dart';
 
 import 'package:client/exceptions/login_failure.dart';
 import 'package:client/exceptions/upvibe_timeout.dart';
+import 'package:client/exceptions/upvibe_error.dart';
 
 const appScheme = 'flutterdemo';
+
+UpvibeError throwErrorFromBadResponse(Response response) {
+  Map<int, UpvibeErrorType> errorCodeToTypeMapping = {
+    -1: UpvibeErrorType.generic,
+  };
+
+  Map<String, dynamic> json = response.data;
+  throw switch (json) {
+    {
+      'message': String message,
+      'code': int code,
+    } =>
+      UpvibeError(message: message, type: errorCodeToTypeMapping[code]!),
+    _ => throw const FormatException(
+        'Failed to load UpvibeError from bad response'),
+  };
+}
 
 class UpvibeRemoteDatasource {
   late Dio dio;
@@ -45,6 +63,10 @@ class UpvibeRemoteDatasource {
       return FileDTO.fromJson(json);
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
       rethrow;
     }
   }

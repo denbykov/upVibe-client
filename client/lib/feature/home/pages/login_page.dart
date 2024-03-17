@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:client/feature/snackBars.dart';
+
+import 'package:client/feature/controllers/snack_bar_controller.dart';
+import 'package:client/feature/widgets/app_scaffold_widget.dart';
+
 import 'package:client/feature/home/controllers/login_controller.dart';
-import 'package:client/feature/widgets/app_snack_bar_widget.dart';
-import 'package:client/feature/widgets/app_scaffold.dart';
 
 class LoginPage extends StatelessWidget {
-  final LoginController _controller = Get.find<LoginController>();
   final String _title = 'Login';
 
-  LoginPage({super.key}) {
-    AppSnackBarWidget();
-  }
+  final LoginController _controller = Get.find<LoginController>();
+  final SnackBarController _snackBarController = Get.find<SnackBarController>();
+
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    _snackBarController.registerOnErrorCallback(showErrorSnackBar);
+
+    return AppScaffoldWidget(
       title: _title,
       body: buildContent(),
     );
