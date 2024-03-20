@@ -70,4 +70,25 @@ class UpvibeRemoteDatasource {
       rethrow;
     }
   }
+
+  Future<void> downloadIconBySourceId(int id, String path) async {
+    try {
+      final tempDio = Dio(BaseOptions(
+        connectTimeout: const Duration(seconds: 3),
+        baseUrl: 'http://10.0.2.2:8000/',
+      ));
+
+      await tempDio.download(
+        'icons/youtube-logo.svg',
+        path,
+      );
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
 }

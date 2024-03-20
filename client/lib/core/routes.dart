@@ -7,4 +7,6 @@ class Routes {
   static const String addFile = '/add/addFille';
   static const String uploadFille = '/add/uploadFile';
   static const String addPlaylist = '/add/addPlaylist';
+  static const String files = '/files';
+  static const String file = '/file';
 }

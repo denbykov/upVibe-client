@@ -6,7 +6,6 @@ class SnackBarController extends GetxController {
   Function(String, int)? _onError;
 
   void showError(String message) {
-    // "Error"
     _onError!(message, duration);
   }
 

@@ -23,10 +23,9 @@ class AddFileController extends GetxController {
       var url = urlFieldController.text;
       var file = await _repository.addFile(url);
 
-      // await _useCase.call();
-      // Get.offAndToNamed(Routes.home);
+      Get.offAndToNamed(Routes.home);
     } on UpvibeTimeout {
-      // snackBarController.showError('Upvibe server does not respond');
+      snackBarController.showError('Upvibe server does not respond');
     } on UpvibeError catch (ex) {
       if (ex.type == UpvibeErrorType.generic) {
         snackBarController.showError(ex.message);
