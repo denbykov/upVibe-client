@@ -1,4 +1,5 @@
 import 'package:client/data/dto/source_dto.dart';
+import 'package:client/domain/entities/file.dart';
 
 class ShortTagsDTO {
   final String? title;
@@ -33,6 +34,16 @@ class ShortTagsDTO {
         ),
       _ => throw const FormatException('Failed to load ShortTagsDTO'),
     };
+  }
+
+  ShortTags toEntity() {
+    return ShortTags(
+      title: title,
+      artist: artist,
+      album: album,
+      year: year,
+      trackNumber: trackNumber,
+    );
   }
 }
 
@@ -70,5 +81,15 @@ class FileDTO {
         ),
       _ => throw const FormatException('Failed to load FileDTO'),
     };
+  }
+
+  File toEntity() {
+    return File(
+      id: id,
+      source: source.toEntity(),
+      status: status,
+      sourceUrl: sourceUrl,
+      shortTags: shortTags?.toEntity(),
+    );
   }
 }

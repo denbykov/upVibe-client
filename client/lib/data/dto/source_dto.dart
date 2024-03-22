@@ -1,3 +1,5 @@
+import 'package:client/domain/entities/source.dart';
+
 class SourceDTO {
   final int id;
   final String source;
@@ -16,5 +18,9 @@ class SourceDTO {
         ),
       _ => throw const FormatException('Failed to load SourceDTO'),
     };
+  }
+
+  Source toEntity() {
+    return Source(id: id, source: source);
   }
 }

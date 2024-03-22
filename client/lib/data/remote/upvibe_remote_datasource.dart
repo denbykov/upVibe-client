@@ -91,4 +91,34 @@ class UpvibeRemoteDatasource {
       rethrow;
     }
   }
+
+  Future<List<FileDTO>> getFiles() async {
+    try {
+      var response = await dio.get('v1/files');
+      var json = response.data;
+      return (json as List).map((object) => FileDTO.fromJson(object)).toList();
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<FileDTO> getFile(int id) async {
+    try {
+      var response = await dio.get('v1/files/$id');
+      var json = response.data;
+      return FileDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
 }

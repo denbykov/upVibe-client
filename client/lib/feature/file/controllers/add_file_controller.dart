@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import 'package:client/feature/controllers/snack_bar_controller.dart';
 
-// import 'package:client/exceptions/login_failure.dart';
 import 'package:client/exceptions/upvibe_timeout.dart';
 import 'package:client/exceptions/upvibe_error.dart';
 

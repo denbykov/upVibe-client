@@ -1,7 +1,6 @@
-import 'package:client/feature/controllers/assets_controller.dart';
+import 'package:client/feature/file/widgets/file_list_item_widget.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:client/domain/entities/file.dart';
@@ -16,38 +15,18 @@ import 'package:client/feature/file/controllers/files_controller.dart';
 class FilesPage extends StatelessWidget {
   final FilesController _filesController = Get.find<FilesController>();
   final SnackBarController _snackBarController = Get.find<SnackBarController>();
-  final AssetsController _assetsController = Get.find<AssetsController>();
   final String _title = 'Files';
 
   FilesPage({super.key});
 
-  ListTile buildFileTile(File file) {
+  Widget buildFileItem(File file) {
     if (file.shortTags != null &&
         file.shortTags!.artist != null &&
         file.shortTags!.artist != null) {
-      return ListTile(
-        leading: FutureBuilder<SvgPicture>(
-          future: _assetsController.getIconBySourceId(file.source.id),
-          builder: (BuildContext context, AsyncSnapshot<SvgPicture> snapshot) {
-            if (snapshot.hasData) {
-              return snapshot.data!;
-            }
-            return SizedBox(
-              height: 48.0,
-              width: 48.0,
-              child: SpinKitPulse(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer),
-            );
-          },
-        ),
-        title: Text('${file.shortTags!.artist!} - ${file.shortTags!.title!}'),
-        onTap: () => {},
-      );
+      return FileListItemWidget(file: file);
     }
 
-    return ListTile(
-      title: Text(file.sourceUrl),
-    );
+    return Text(file.sourceUrl);
   }
 
   Widget buildContent(BuildContext context) {
@@ -62,7 +41,7 @@ class FilesPage extends StatelessWidget {
           return ListView.builder(
               itemCount: snapshot.data?.length ?? 0,
               itemBuilder: (context, index) {
-                return buildFileTile(snapshot.data![index]);
+                return buildFileItem(snapshot.data![index]);
               });
         }
         return const CircularProgressIndicator();
