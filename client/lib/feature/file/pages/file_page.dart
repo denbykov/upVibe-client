@@ -4,10 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:client/feature/snackBars.dart';
-
 import 'package:client/feature/controllers/assets_controller.dart';
-import 'package:client/feature/controllers/snack_bar_controller.dart';
 import 'package:client/feature/widgets/app_scaffold_widget.dart';
 
 import 'package:client/feature/file/controllers/file_controller.dart';
@@ -15,7 +12,6 @@ import 'package:client/feature/file/controllers/file_controller.dart';
 class FilePage extends StatelessWidget {
   final AssetsController _assetsController = Get.find<AssetsController>();
   final FileController _controller = Get.find<FileController>();
-  final SnackBarController _snackBarController = Get.find<SnackBarController>();
   final String _title = 'File';
 
   FilePage({super.key});
@@ -107,8 +103,6 @@ class FilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _snackBarController.registerOnErrorCallback(showErrorSnackBar);
-
     return AppScaffoldWidget(
       title: _title,
       body: buildContent(context),

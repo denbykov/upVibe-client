@@ -5,16 +5,12 @@ import 'package:get/get.dart';
 
 import 'package:client/domain/entities/file.dart';
 
-import 'package:client/feature/snackBars.dart';
-
-import 'package:client/feature/controllers/snack_bar_controller.dart';
 import 'package:client/feature/widgets/app_scaffold_widget.dart';
 
 import 'package:client/feature/file/controllers/files_controller.dart';
 
 class FilesPage extends StatelessWidget {
   final FilesController _filesController = Get.find<FilesController>();
-  final SnackBarController _snackBarController = Get.find<SnackBarController>();
   final String _title = 'Files';
 
   FilesPage({super.key});
@@ -51,8 +47,6 @@ class FilesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _snackBarController.registerOnErrorCallback(showErrorSnackBar);
-
     return AppScaffoldWidget(
       title: _title,
       body: buildContent(context),

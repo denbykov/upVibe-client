@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:client/feature/snackBars.dart';
-
-import 'package:client/feature/controllers/snack_bar_controller.dart';
 import 'package:client/feature/widgets/app_scaffold_widget.dart';
 
 import 'package:client/feature/file/controllers/add_file_controller.dart';
 
 class AddFilePage extends StatelessWidget {
   final AddFileController _controller = Get.find<AddFileController>();
-  final SnackBarController _snackBarController = Get.find<SnackBarController>();
   final String _title = 'Add File';
 
   AddFilePage({super.key});
@@ -46,8 +41,6 @@ class AddFilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _snackBarController.registerOnErrorCallback(showErrorSnackBar);
-
     return AppScaffoldWidget(
       title: _title,
       body: buildContent(context),
