@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:client/data/dto/file_dto.dart';
+import 'package:client/data/dto/tag_dto.dart';
 import 'package:dio/dio.dart';
 
 import 'package:client/exceptions/login_failure.dart';
@@ -112,6 +113,21 @@ class UpvibeRemoteDatasource {
       var response = await dio.get('v1/files/$id');
       var json = response.data;
       return FileDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<TagDTO>> getTagsForFile(int id) async {
+    try {
+      var response = await dio.get('v1/files/$id/tags');
+      var json = response.data;
+      return (json as List).map((object) => TagDTO.fromJson(object)).toList();
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
       if (ex.type == DioExceptionType.badResponse &&

@@ -20,8 +20,10 @@ class FileListItemWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          border:
-              Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+          border: Border.symmetric(
+            horizontal:
+                BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

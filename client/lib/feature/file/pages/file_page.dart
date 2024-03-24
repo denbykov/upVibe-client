@@ -81,8 +81,39 @@ class FilePage extends StatelessWidget {
     );
   }
 
+  Widget buildImageTag(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(64, 8, 64, 8),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   Widget buildTagsSection(BuildContext context) {
-    return Card();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildImageTag(context),
+        Divider(height: 1, color: Theme.of(context).colorScheme.outlineVariant),
+      ],
+    );
   }
 
   Widget buildContent(BuildContext context) {
