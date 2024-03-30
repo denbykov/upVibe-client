@@ -33,4 +33,6 @@ class FileController extends GetxController {
     await Clipboard.setData(ClipboardData(text: file.value!.sourceUrl));
     Get.snackbar('Source URL copied', file.value!.sourceUrl);
   }
+
+  Future<void> onTitleTagChanged(int index) async {}
 }

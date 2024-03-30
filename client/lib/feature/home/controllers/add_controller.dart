@@ -4,14 +4,14 @@ import 'package:client/core/routes.dart';
 
 class AddController extends GetxController {
   void navigateToAddFile() {
-    Get.toNamed(Routes.addFile);
+    Get.offAndToNamed(Routes.addFile);
   }
 
   void navigateToUploadFile() {
-    Get.toNamed(Routes.uploadFille);
+    Get.offAndToNamed(Routes.uploadFille);
   }
 
   void navigateToAddPlaylist() {
-    Get.toNamed(Routes.addPlaylist);
+    Get.offAndToNamed(Routes.addPlaylist);
   }
 }

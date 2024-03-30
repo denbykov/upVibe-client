@@ -1,16 +1,14 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:client/domain/entities/file.dart';
+import 'package:client/feature/widgets/source_icon_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import 'package:client/feature/controllers/assets_controller.dart';
 import 'package:client/feature/widgets/app_scaffold_widget.dart';
 
 import 'package:client/feature/file/controllers/file_controller.dart';
 
 class FilePage extends StatelessWidget {
-  final AssetsController _assetsController = Get.find<AssetsController>();
   final FileController _controller = Get.find<FileController>();
   final String _title = 'File';
 
@@ -50,24 +48,9 @@ class FilePage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              FutureBuilder<SvgPicture>(
-                future: _assetsController.getIconBySourceId(file.source.id),
-                builder:
-                    (BuildContext context, AsyncSnapshot<SvgPicture> snapshot) {
-                  if (snapshot.hasData) {
-                    return SvgPicture(snapshot.data!.bytesLoader,
-                        colorFilter: ColorFilter.mode(
-                            Get.theme.colorScheme.onSecondaryContainer,
-                            BlendMode.srcIn));
-                  }
-                  return SizedBox(
-                    height: 48.0,
-                    width: 48.0,
-                    child: SpinKitPulse(
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
-                  );
-                },
+              SourceIconWidget(
+                color: Get.theme.colorScheme.onSecondaryContainer,
+                id: file.source.id,
               ),
               const SizedBox(width: 8.0),
               Text(file.sourceUrl,
@@ -82,43 +65,55 @@ class FilePage extends StatelessWidget {
   }
 
   Widget buildImageTag(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(64, 8, 64, 8),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          itemCount: 1,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            );
-          },
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+          ),
         ),
       ),
     );
   }
 
   Widget buildTagsSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildImageTag(context),
-        Divider(height: 1, color: Theme.of(context).colorScheme.outlineVariant),
-      ],
+    return Expanded(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+        children: [
+          buildImageTag(context),
+          TextTagCarouselSlider(
+            label: 'Title',
+            items: _controller.tags.value!
+                .map((el) => {'text': el.title, 'source': el.source})
+                .toList(),
+            onPageChanged: _controller.onTitleTagChanged,
+          ),
+          TextTagCarouselSlider(
+            label: 'Atirst',
+            items: _controller.tags.value!
+                .map((el) => {'text': el.artist, 'source': el.source})
+                .toList(),
+            onPageChanged: _controller.onTitleTagChanged,
+          ),
+          TextTagCarouselSlider(
+            label: 'Album',
+            items: _controller.tags.value!
+                .map((el) => {'text': el.album, 'source': el.source})
+                .toList(),
+            onPageChanged: _controller.onTitleTagChanged,
+          )
+        ],
+      ),
     );
   }
 
   Widget buildContent(BuildContext context) {
     return Obx(() {
-      if (_controller.file.value != null) {
+      if (_controller.file.value != null && _controller.tags.value != null) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -137,6 +132,96 @@ class FilePage extends StatelessWidget {
     return AppScaffoldWidget(
       title: _title,
       body: buildContent(context),
+    );
+  }
+}
+
+class TextTagCarouselSlider extends StatelessWidget {
+  final Function(int index) onPageChanged;
+  final List<Map<String, dynamic>> items;
+  final String label;
+
+  const TextTagCarouselSlider({
+    super.key,
+    required this.onPageChanged,
+    required this.items,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(4, 8, 0, 0),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 50,
+            child: Text(label, style: Theme.of(context).textTheme.titleMedium!),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Expanded(
+            child: CarouselSlider(
+              options: CarouselOptions(
+                height: 30,
+                initialPage: 1,
+                onPageChanged: (index, reason) {
+                  onPageChanged(index);
+                },
+                viewportFraction: 1,
+                enableInfiniteScroll: false,
+              ),
+              items: items.map(
+                (item) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 3.0),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                          ),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 30.0,
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    item['text'] ?? '',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondaryContainer,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 30.0,
+                                child: SourceIconWidget(
+                                  color: Get
+                                      .theme.colorScheme.onSecondaryContainer,
+                                  id: item['source'],
+                                ),
+                              ),
+                            ],
+                          ));
+                    },
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

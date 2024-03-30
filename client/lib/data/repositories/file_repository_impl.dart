@@ -10,8 +10,9 @@ class FileRepositoryImpl extends FileRepository {
       Get.find<UpvibeRemoteDatasource>();
 
   @override
-  Future<void> addFile(String url) async {
+  Future<File> addFile(String url) async {
     var data = await _upvibeDatasource.addFile(url);
+    return data.toEntity();
   }
 
   @override
