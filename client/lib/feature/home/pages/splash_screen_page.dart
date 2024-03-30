@@ -5,7 +5,6 @@ import 'package:client/feature/home/controllers/splash_screen_controller.dart';
 
 class SplashScreenPage extends StatelessWidget {
   final SplashScreenController _controller = Get.find<SplashScreenController>();
-
   SplashScreenPage({super.key});
 
   @override

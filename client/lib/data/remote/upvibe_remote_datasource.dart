@@ -1,12 +1,31 @@
 import 'dart:async';
 
 import 'package:client/data/dto/file_dto.dart';
+import 'package:client/data/dto/tag_dto.dart';
 import 'package:dio/dio.dart';
 
 import 'package:client/exceptions/login_failure.dart';
 import 'package:client/exceptions/upvibe_timeout.dart';
+import 'package:client/exceptions/upvibe_error.dart';
 
 const appScheme = 'flutterdemo';
+
+UpvibeError throwErrorFromBadResponse(Response response) {
+  Map<int, UpvibeErrorType> errorCodeToTypeMapping = {
+    -1: UpvibeErrorType.generic,
+  };
+
+  Map<String, dynamic> json = response.data;
+  throw switch (json) {
+    {
+      'message': String message,
+      'code': int code,
+    } =>
+      UpvibeError(message: message, type: errorCodeToTypeMapping[code]!),
+    _ => throw const FormatException(
+        'Failed to load UpvibeError from bad response'),
+  };
+}
 
 class UpvibeRemoteDatasource {
   late Dio dio;
@@ -45,6 +64,76 @@ class UpvibeRemoteDatasource {
       return FileDTO.fromJson(json);
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> downloadIconBySourceId(int id, String path) async {
+    try {
+      final tempDio = Dio(BaseOptions(
+        connectTimeout: const Duration(seconds: 3),
+        baseUrl: 'http://10.0.2.2:8000/',
+      ));
+
+      await tempDio.download(
+        'icons/youtube-logo.svg',
+        path,
+      );
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<FileDTO>> getFiles() async {
+    try {
+      var response = await dio.get('v1/files');
+      var json = response.data;
+      return (json as List).map((object) => FileDTO.fromJson(object)).toList();
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<FileDTO> getFile(int id) async {
+    try {
+      var response = await dio.get('v1/files/$id');
+      var json = response.data;
+      return FileDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<TagDTO>> getTagsForFile(int id) async {
+    try {
+      var response = await dio.get('v1/files/$id/tags');
+      var json = response.data;
+      return (json as List).map((object) => TagDTO.fromJson(object)).toList();
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
       rethrow;
     }
   }

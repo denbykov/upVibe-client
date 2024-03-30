@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:client/feature/theme.dart';
 
-class AppScaffold extends StatelessWidget {
+class AppScaffoldWidget extends StatelessWidget {
   final String title;
   final Widget body;
   final Widget? drawer;
   final Widget? floatingActionButton;
 
-  const AppScaffold(
+  const AppScaffoldWidget(
       {super.key,
       required this.title,
       required this.body,

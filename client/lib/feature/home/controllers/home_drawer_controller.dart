@@ -6,4 +6,8 @@ class HomeDrawerController extends GetxController {
   void navigateToSettings() {
     Get.toNamed(Routes.settings);
   }
+
+  void navigateToFiles() {
+    Get.toNamed(Routes.files);
+  }
 }

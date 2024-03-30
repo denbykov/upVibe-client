@@ -1,6 +1,10 @@
+import 'package:client/data/repositories/assets_repository_impl.dart';
+import 'package:client/data/repositories/tag_repository_impl.dart';
+import 'package:client/domain/repositories/assets_repository.dart';
+import 'package:client/domain/repositories/tag_repository.dart';
+import 'package:client/feature/controllers/assets_controller.dart';
+import 'package:client/feature/file/controllers/file_controller.dart';
 import 'package:get/get.dart';
-
-import 'package:client/feature/controllers/snack_bar_controller.dart';
 
 import 'package:client/feature/home/controllers/splash_screen_controller.dart';
 import 'package:client/feature/home/controllers/login_controller.dart';
@@ -10,6 +14,8 @@ import 'package:client/feature/home/controllers/home_controller.dart';
 import 'package:client/feature/home/controllers/add_controller.dart';
 
 import 'package:client/feature/file/controllers/add_file_controller.dart';
+import 'package:client/feature/file/controllers/files_controller.dart';
+import 'package:client/feature/file/controllers/file_list_item_controller.dart';
 
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
@@ -47,11 +53,13 @@ class HomeBinding implements Bindings {
     Get.lazyPut<AuthorizationRepository>(() => AuthorizationRepositoryImpl());
     Get.lazyPut<StorageRepository>(() => StorageRepositoryImpl());
     Get.lazyPut<FileRepository>(() => FileRepositoryImpl());
+    Get.lazyPut<AssetsRepository>(() => AssetsRepositoryImpl());
+    Get.lazyPut<TagRepository>(() => TagRepositoryImpl());
 
     Get.lazyPut<LoginUseCase>(() => LoginUseCase());
 
     Get.lazyPut<SplashScreenController>(() => SplashScreenController());
-    Get.lazyPut<SnackBarController>(() => SnackBarController());
+    Get.lazyPut<AssetsController>(() => AssetsController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());
     Get.lazyPut<HomeController>(() => HomeController());
@@ -59,5 +67,8 @@ class HomeBinding implements Bindings {
     Get.lazyPut<AddController>(() => AddController());
 
     Get.lazyPut<AddFileController>(() => AddFileController());
+    Get.lazyPut<FilesController>(() => FilesController());
+    Get.lazyPut<FileListItemController>(() => FileListItemController());
+    Get.lazyPut<FileController>(() => FileController());
   }
 }
