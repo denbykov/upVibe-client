@@ -15,9 +15,12 @@ class AssetsRepositoryImpl extends AssetsRepository {
       Get.find<StorageLocalDatasource>();
 
   @override
-  Future<void> donwloadIconBySourceId(int id) async {
-    final path = await _storageDatasource.getIconPathBySourceId(id);
-    await _upvibeDatasource.downloadIconBySourceId(id, path);
+  Future<void> loadAssets() async {
+    final sources = await _upvibeDatasource.getSources();
+    for (final source in sources) {
+      final logo = await _upvibeDatasource.getSourceLogo(source.id);
+      await _storageDatasource.cacheSourceLogo(source.id, logo);
+    }
   }
 
   @override
