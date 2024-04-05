@@ -21,8 +21,6 @@ import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
 import 'package:client/domain/repositories/file_repository.dart';
 
-import 'package:client/domain/use_cases/login_use_case.dart';
-
 import 'package:client/data/repositories/authorization_repository_impl.dart';
 import 'package:client/data/repositories/storage_repository_impl.dart';
 import 'package:client/data/repositories/file_repository_impl.dart';
@@ -55,8 +53,6 @@ class HomeBinding implements Bindings {
     Get.lazyPut<FileRepository>(() => FileRepositoryImpl());
     Get.lazyPut<AssetsRepository>(() => AssetsRepositoryImpl());
     Get.lazyPut<TagRepository>(() => TagRepositoryImpl());
-
-    Get.lazyPut<LoginUseCase>(() => LoginUseCase());
 
     Get.lazyPut<SplashScreenController>(() => SplashScreenController());
     Get.lazyPut<AssetsController>(() => AssetsController());

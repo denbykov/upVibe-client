@@ -1,28 +1,35 @@
-import 'dart:io';
-import 'dart:ui';
-
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:device_info_plus/device_info_plus.dart';
+
 class Preferences {
   static const String debugToken = 'debugToken';
+  static const String uuid = 'uuid';
 }
 
 class StorageLocalDatasource {
   late SharedPreferences _prefs;
   late PackageInfo _packageInfo;
+  late DeviceInfoPlugin _deviceInfo;
+
+  final _sourceIcons = <int, SvgPicture>{};
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
     _packageInfo = await PackageInfo.fromPlatform();
+    _deviceInfo = DeviceInfoPlugin();
   }
 
   String getAppVesrion() {
     return _packageInfo.version;
+  }
+
+  Future<String> getDeviceName() async {
+    AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
+    return androidInfo.model;
   }
 
   Future<void> storeDebugAccessToken(String token) async {
@@ -33,19 +40,19 @@ class StorageLocalDatasource {
     return _prefs.getString(Preferences.debugToken);
   }
 
-  Future<String> getIconPathBySourceId(int id) async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return '${directory.path}/icons/$id.svg';
+  Future<SvgPicture> getIconBySourceId(int id) async {
+    return _sourceIcons[id]!;
   }
 
-  Future<SvgPicture> getIconBySourceId(int id) async {
-    final path = await getIconPathBySourceId(id);
+  String? getUuid() {
+    return _prefs.getString(Preferences.uuid);
+  }
 
-    return SvgPicture.file(
-      File(path),
-      colorFilter:
-          ColorFilter.mode(Get.theme.colorScheme.tertiary, BlendMode.srcIn),
-    );
+  Future<void> storeUuid(String uuid) async {
+    await _prefs.setString(Preferences.uuid, uuid);
+  }
+
+  Future<void> cacheSourceLogo(int id, SvgPicture logo) async {
+    _sourceIcons[id] = logo;
   }
 }

@@ -8,7 +8,6 @@ class AssetsController extends GetxController {
   final AssetsRepository _repository = Get.find<AssetsRepository>();
 
   Future<SvgPicture> getIconBySourceId(int id) async {
-    await _repository.donwloadIconBySourceId(id);
     return await _repository.getIconBySourceId(id);
   }
 }

@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       themeMode: ThemeMode.dark,
-      initialRoute: Routes.splashScreen,
+      initialRoute: Routes.login,
       getPages: Pages.pages,
     );
   }
