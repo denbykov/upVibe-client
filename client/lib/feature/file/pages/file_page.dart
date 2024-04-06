@@ -73,6 +73,17 @@ class FilePage extends StatelessWidget {
           aspectRatio: 1,
           child: Container(
             color: Theme.of(context).colorScheme.secondaryContainer,
+            child: Obx(() {
+              bool imageIsReady = (_controller.images.value != null &&
+                  _controller.images.value![0].image != null);
+
+              return !imageIsReady
+                  ? const CircularProgressIndicator()
+                  : Image.memory(
+                      _controller.images.value![0].image!,
+                      fit: BoxFit.cover,
+                    );
+            }),
           ),
         ),
       ),

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
 
@@ -12,5 +14,10 @@ class TagRepositoryImpl extends TagRepository {
   Future<List<Tag>> getTagsForFile(int id) async {
     final tags = await _upvibeDatasource.getTagsForFile(id);
     return tags.map((dto) => dto.toEntity()).toList();
+  }
+
+  @override
+  Future<Uint8List?> getImage(int tagId) async {
+    return await _upvibeDatasource.getTagImage(tagId);
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:client/data/dto/file_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
@@ -168,6 +169,23 @@ class UpvibeRemoteDatasource {
       if (ex.type == DioExceptionType.badResponse &&
           ex.response!.statusCode == 400) {
         throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<Uint8List?> getTagImage(int tagId) async {
+    try {
+      var response = await dio.get('v1/tags/$tagId/picture',
+          options: Options(responseType: ResponseType.bytes));
+      return response.data;
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        return null;
       }
       rethrow;
     }
