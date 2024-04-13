@@ -1,3 +1,4 @@
+import 'package:client/domain/entities/extended_file.dart';
 import 'package:client/domain/entities/file.dart';
 
 abstract class FileRepository {
@@ -5,5 +6,5 @@ abstract class FileRepository {
 
   Future<List<File>> getFiles();
 
-  Future<File> getFile(int id);
+  Future<ExtendedFile> getFile(String id);
 }

@@ -54,6 +54,9 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
       debugPrint(token);
       _upvibeDatasource.setAccessToken(token);
 
+      var myUuid = await registerDevice();
+      await _storageDatasource.storeUuid(myUuid);
+
       if (_storageDatasource.getUuid() == null) {
         var myUuid = await registerDevice();
         await _storageDatasource.storeUuid(myUuid);

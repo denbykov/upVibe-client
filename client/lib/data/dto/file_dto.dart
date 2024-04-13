@@ -48,7 +48,7 @@ class ShortTagsDTO {
 }
 
 class FileDTO {
-  final int id;
+  final String id;
   final SourceDTO source;
   final String status;
   final String sourceUrl;
@@ -65,7 +65,7 @@ class FileDTO {
   factory FileDTO.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'id': int id,
+        'id': String id,
         'source': Map<String, dynamic> source,
         'status': String status,
         'sourceUrl': String sourceUrl,

@@ -2,7 +2,7 @@ import 'package:client/data/repositories/assets_repository_impl.dart';
 import 'package:client/data/repositories/tag_repository_impl.dart';
 import 'package:client/domain/repositories/assets_repository.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
-import 'package:client/feature/controllers/assets_controller.dart';
+import 'package:client/feature/controllers/source_icon_controller.dart';
 import 'package:client/feature/file/controllers/file_controller.dart';
 import 'package:get/get.dart';
 
@@ -55,7 +55,7 @@ class HomeBinding implements Bindings {
     Get.lazyPut<TagRepository>(() => TagRepositoryImpl());
 
     Get.lazyPut<SplashScreenController>(() => SplashScreenController());
-    Get.lazyPut<AssetsController>(() => AssetsController());
+    Get.create<SourceIconController>(() => SourceIconController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());
     Get.lazyPut<HomeController>(() => HomeController());

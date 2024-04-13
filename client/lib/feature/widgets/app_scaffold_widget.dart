@@ -6,13 +6,16 @@ class AppScaffoldWidget extends StatelessWidget {
   final Widget body;
   final Widget? drawer;
   final Widget? floatingActionButton;
+  final List<Widget>? appBarActions;
 
-  const AppScaffoldWidget(
-      {super.key,
-      required this.title,
-      required this.body,
-      this.drawer,
-      this.floatingActionButton});
+  const AppScaffoldWidget({
+    super.key,
+    required this.title,
+    required this.body,
+    this.appBarActions,
+    this.drawer,
+    this.floatingActionButton,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class AppScaffoldWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        // backgroundColor: appBarBackgroundColor,
+        actions: appBarActions,
       ),
       body: body,
       drawer: drawer,

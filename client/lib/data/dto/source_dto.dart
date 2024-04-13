@@ -1,7 +1,7 @@
 import 'package:client/domain/entities/source.dart';
 
 class SourceDTO {
-  final int id;
+  final String id;
   final String source;
 
   const SourceDTO({required this.id, required this.source});
@@ -9,7 +9,7 @@ class SourceDTO {
   factory SourceDTO.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'id': int id,
+        'id': String id,
         'source': String source,
       } =>
         SourceDTO(
