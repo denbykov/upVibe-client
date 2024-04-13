@@ -1,3 +1,4 @@
+import 'package:client/domain/entities/extended_file.dart';
 import 'package:client/domain/entities/file.dart';
 import 'package:client/domain/repositories/file_repository.dart';
 
@@ -22,8 +23,8 @@ class FileRepositoryImpl extends FileRepository {
   }
 
   @override
-  Future<File> getFile(int id) async {
-    final file = await _upvibeDatasource.getFile(id);
-    return file.toEntity();
+  Future<ExtendedFile> getFile(String id) async {
+    final extendedFile = await _upvibeDatasource.getFile(id);
+    return extendedFile.toEntity();
   }
 }

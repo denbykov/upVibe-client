@@ -24,7 +24,7 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
-  Future<SvgPicture> getIconBySourceId(int id) async {
-    return await _storageDatasource.getIconBySourceId(id);
+  SvgPicture getIconBySourceId(String id) {
+    return _storageDatasource.getIconBySourceId(id);
   }
 }

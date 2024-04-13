@@ -15,7 +15,7 @@ class StorageLocalDatasource {
   late PackageInfo _packageInfo;
   late DeviceInfoPlugin _deviceInfo;
 
-  final _sourceIcons = <int, SvgPicture>{};
+  final _sourceIcons = <String, SvgPicture>{};
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
@@ -40,7 +40,7 @@ class StorageLocalDatasource {
     return _prefs.getString(Preferences.debugToken);
   }
 
-  Future<SvgPicture> getIconBySourceId(int id) async {
+  SvgPicture getIconBySourceId(String id) {
     return _sourceIcons[id]!;
   }
 
@@ -52,7 +52,7 @@ class StorageLocalDatasource {
     await _prefs.setString(Preferences.uuid, uuid);
   }
 
-  Future<void> cacheSourceLogo(int id, SvgPicture logo) async {
+  Future<void> cacheSourceLogo(String id, SvgPicture logo) async {
     _sourceIcons[id] = logo;
   }
 }

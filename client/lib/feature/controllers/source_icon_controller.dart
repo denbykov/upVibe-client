@@ -4,10 +4,12 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:client/domain/repositories/assets_repository.dart';
 
-class AssetsController extends GetxController {
+class SourceIconController extends GetxController {
   final AssetsRepository _repository = Get.find<AssetsRepository>();
 
-  Future<SvgPicture> getIconBySourceId(int id) async {
-    return await _repository.getIconBySourceId(id);
+  final data = Rxn<SvgPicture>();
+
+  Future<void> loadIconBySourceId(String id) async {
+    data.value = _repository.getIconBySourceId(id);
   }
 }

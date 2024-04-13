@@ -1,13 +1,13 @@
-import 'package:client/feature/controllers/assets_controller.dart';
+import 'package:client/feature/controllers/source_icon_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class SourceIconWidget extends StatelessWidget {
-  final AssetsController _assetsController = Get.find<AssetsController>();
+  final SourceIconController _controller = Get.find<SourceIconController>();
 
-  final int id;
+  final String id;
   final Color color;
 
   SourceIconWidget({
@@ -18,12 +18,15 @@ class SourceIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SvgPicture>(
-      future: _assetsController.getIconBySourceId(id),
-      builder: (BuildContext context, AsyncSnapshot<SvgPicture> snapshot) {
-        if (snapshot.hasData) {
-          return SvgPicture(snapshot.data!.bytesLoader,
-              colorFilter: ColorFilter.mode(color, BlendMode.srcIn));
+    _controller.loadIconBySourceId(id);
+
+    return Obx(
+      () {
+        if (_controller.data.value != null) {
+          return SvgPicture(
+            _controller.data.value!.bytesLoader,
+            colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          );
         }
         return SizedBox(
           height: 24.0,

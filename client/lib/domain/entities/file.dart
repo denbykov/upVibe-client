@@ -17,7 +17,7 @@ class ShortTags {
 }
 
 class File {
-  final int id;
+  final String id;
   final Source source;
   final String status;
   final String sourceUrl;

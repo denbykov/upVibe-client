@@ -1,7 +1,7 @@
 class Tag {
-  final int id;
-  final int fileId;
-  final int source;
+  final String id;
+  final String fileId;
+  final String source;
   final String status;
   final String? title;
   final String? artist;

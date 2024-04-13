@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:client/data/dto/file_dto.dart';
+import 'package:client/data/dto/etxended_file_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
 import 'package:client/data/dto/tag_dto.dart';
+import 'package:client/data/dto/tag_mapping_dto.dart';
 import 'package:dio/dio.dart';
 
 import 'package:client/exceptions/login_failure.dart';
@@ -89,11 +92,13 @@ class UpvibeRemoteDatasource {
     }
   }
 
-  Future<FileDTO> getFile(int id) async {
+  Future<ExtendedFileDTO> getFile(String id) async {
     try {
-      var response = await dio.get('v1/files/$id');
+      var response = await dio.get('v1/files/$id', queryParameters: {
+        'expand': 'mapping',
+      });
       var json = response.data;
-      return FileDTO.fromJson(json);
+      return ExtendedFileDTO.fromJson(json);
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
       if (ex.type == DioExceptionType.badResponse &&
@@ -104,7 +109,7 @@ class UpvibeRemoteDatasource {
     }
   }
 
-  Future<List<TagDTO>> getTagsForFile(int id) async {
+  Future<List<TagDTO>> getTagsForFile(String id) async {
     try {
       var response = await dio.get('v1/files/$id/tags');
       var json = response.data;
@@ -156,11 +161,43 @@ class UpvibeRemoteDatasource {
     }
   }
 
-  Future<SvgPicture> getSourceLogo(int id) async {
+  Future<SvgPicture> getSourceLogo(String id) async {
     try {
       var response = await dio.get('v1/sources/$id/logo');
       var file = response.data;
       return SvgPicture.string(file);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<Uint8List?> getTagImage(String tagId) async {
+    try {
+      var response = await dio.get('v1/tags/$tagId/picture',
+          options: Options(responseType: ResponseType.bytes));
+      return response.data;
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        return null;
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> updateMapping(String fileId, TagMappingDTO mapping) async {
+    try {
+      await dio.put('v1/files/$fileId/tag-mapping', data: mapping.toJson());
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) {
         throw UpvibeTimeout();

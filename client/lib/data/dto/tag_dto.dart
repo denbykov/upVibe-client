@@ -1,9 +1,9 @@
 import 'package:client/domain/entities/tag.dart';
 
 class TagDTO {
-  final int id;
-  final int fileId;
-  final int source;
+  final String id;
+  final String fileId;
+  final String source;
   final String status;
   final String? title;
   final String? artist;
@@ -24,17 +24,31 @@ class TagDTO {
   });
 
   factory TagDTO.fromJson(Map<String, dynamic> json) {
-    return TagDTO(
-      id: json['id'] as int,
-      fileId: json['fileId'] as int,
-      source: json['source'] as int,
-      status: json['status'] as String,
-      title: json['title'] as String?,
-      artist: json['artist'] as String?,
-      album: json['album'] as String?,
-      year: json['year'] as int?,
-      trackNumber: json['trackNumber'] as int?,
-    );
+    return switch (json) {
+      {
+        'id': String id,
+        'fileId': String fileId,
+        'source': String source,
+        'status': String status,
+        'title': String? title,
+        'artist': String? artist,
+        'album': String? album,
+        'year': int? year,
+        'trackNumber': int? trackNumber,
+      } =>
+        TagDTO(
+          id: id,
+          fileId: fileId,
+          source: source,
+          status: status,
+          title: title,
+          artist: artist,
+          album: album,
+          year: year,
+          trackNumber: trackNumber,
+        ),
+      _ => throw const FormatException('Failed to load TagDTO'),
+    };
   }
 
   Tag toEntity() {
