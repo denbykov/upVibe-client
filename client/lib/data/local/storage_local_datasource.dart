@@ -1,3 +1,5 @@
+import 'package:client/data/dto/tokens_dto.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -14,6 +16,7 @@ class StorageLocalDatasource {
   late SharedPreferences _prefs;
   late PackageInfo _packageInfo;
   late DeviceInfoPlugin _deviceInfo;
+  late FlutterSecureStorage _secureStorage;
 
   final _sourceIcons = <String, SvgPicture>{};
 
@@ -21,6 +24,12 @@ class StorageLocalDatasource {
     _prefs = await SharedPreferences.getInstance();
     _packageInfo = await PackageInfo.fromPlatform();
     _deviceInfo = DeviceInfoPlugin();
+
+    AndroidOptions getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+
+    _secureStorage = FlutterSecureStorage(aOptions: getAndroidOptions());
   }
 
   String getAppVesrion() {
@@ -30,14 +39,6 @@ class StorageLocalDatasource {
   Future<String> getDeviceName() async {
     AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
     return androidInfo.model;
-  }
-
-  Future<void> storeDebugAccessToken(String token) async {
-    await _prefs.setString(Preferences.debugToken, token);
-  }
-
-  String? getDebugAccessToken() {
-    return _prefs.getString(Preferences.debugToken);
   }
 
   SvgPicture getIconBySourceId(String id) {
@@ -54,5 +55,20 @@ class StorageLocalDatasource {
 
   Future<void> cacheSourceLogo(String id, SvgPicture logo) async {
     _sourceIcons[id] = logo;
+  }
+
+  Future<TokensDTO?> getTokens() async {
+    String? refreshToken = await _secureStorage.read(key: "refreshToken");
+    String? accessToken = await _secureStorage.read(key: "accessToken");
+
+    if (refreshToken != null && accessToken != null) {
+      return TokensDTO(accessToken: accessToken, refreshToken: refreshToken);
+    }
+    return null;
+  }
+
+  Future<void> storeTokens(TokensDTO tokens) async {
+    await _secureStorage.write(key: "refreshToken", value: tokens.refreshToken);
+    await _secureStorage.write(key: "accessToken", value: tokens.accessToken);
   }
 }

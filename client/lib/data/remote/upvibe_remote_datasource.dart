@@ -6,12 +6,14 @@ import 'package:client/data/dto/etxended_file_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
 import 'package:client/data/dto/tag_dto.dart';
 import 'package:client/data/dto/tag_mapping_dto.dart';
+import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:dio/dio.dart';
 
 import 'package:client/exceptions/login_failure.dart';
 import 'package:client/exceptions/upvibe_timeout.dart';
 import 'package:client/exceptions/upvibe_error.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart' as getx;
 
 const appScheme = 'flutterdemo';
 
@@ -34,6 +36,9 @@ UpvibeError throwErrorFromBadResponse(Response response) {
 
 class UpvibeRemoteDatasource {
   late Dio dio;
+  Function() ensureAuthorized = () {
+    getx.Get.find<AuthorizationRepository>().login();
+  };
 
   UpvibeRemoteDatasource() {
     dio = Dio(BaseOptions(
@@ -49,6 +54,7 @@ class UpvibeRemoteDatasource {
 
   Future<void> testConnection() async {
     try {
+      await ensureAuthorized();
       var response = await dio.get(
         'v1/auth-test',
       );
@@ -64,6 +70,7 @@ class UpvibeRemoteDatasource {
 
   Future<FileDTO> addFile(String url) async {
     try {
+      await ensureAuthorized();
       var response = await dio.post('v1/files', data: {'url': url});
       var json = response.data;
       return FileDTO.fromJson(json);
@@ -79,6 +86,7 @@ class UpvibeRemoteDatasource {
 
   Future<List<FileDTO>> getFiles() async {
     try {
+      await ensureAuthorized();
       var response = await dio.get('v1/files');
       var json = response.data;
       return (json as List).map((object) => FileDTO.fromJson(object)).toList();
@@ -94,6 +102,7 @@ class UpvibeRemoteDatasource {
 
   Future<ExtendedFileDTO> getFile(String id) async {
     try {
+      await ensureAuthorized();
       var response = await dio.get('v1/files/$id', queryParameters: {
         'expand': 'mapping',
       });
@@ -111,6 +120,7 @@ class UpvibeRemoteDatasource {
 
   Future<List<TagDTO>> getTagsForFile(String id) async {
     try {
+      await ensureAuthorized();
       var response = await dio.get('v1/files/$id/tags');
       var json = response.data;
       return (json as List).map((object) => TagDTO.fromJson(object)).toList();
@@ -126,6 +136,7 @@ class UpvibeRemoteDatasource {
 
   Future<void> registerDevice(String uuid, String name) async {
     try {
+      await ensureAuthorized();
       await dio.post('v1/register', data: {
         'deviceId': uuid,
         'deviceName': name,
@@ -144,6 +155,7 @@ class UpvibeRemoteDatasource {
 
   Future<List<SourceDTO>> getSources() async {
     try {
+      await ensureAuthorized();
       var response = await dio.get('v1/sources');
       var json = response.data;
       return (json as List)
@@ -163,6 +175,7 @@ class UpvibeRemoteDatasource {
 
   Future<SvgPicture> getSourceLogo(String id) async {
     try {
+      await ensureAuthorized();
       var response = await dio.get('v1/sources/$id/logo');
       var file = response.data;
       return SvgPicture.string(file);
@@ -180,6 +193,7 @@ class UpvibeRemoteDatasource {
 
   Future<Uint8List?> getTagImage(String tagId) async {
     try {
+      await ensureAuthorized();
       var response = await dio.get('v1/tags/$tagId/picture',
           options: Options(responseType: ResponseType.bytes));
       return response.data;
@@ -197,6 +211,7 @@ class UpvibeRemoteDatasource {
 
   Future<void> updateMapping(String fileId, TagMappingDTO mapping) async {
     try {
+      await ensureAuthorized();
       await dio.put('v1/files/$fileId/tag-mapping', data: mapping.toJson());
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) {
