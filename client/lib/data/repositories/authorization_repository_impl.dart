@@ -1,11 +1,12 @@
+import 'package:client/data/dto/tokens_dto.dart';
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/data/remote/authorization_remote_datasource.dart';
 import 'package:client/data/remote/upvibe_remote_datasource.dart';
 import 'package:client/data/local/storage_local_datasource.dart';
+import 'package:client/exceptions/login_failure.dart';
 import 'package:flutter/foundation.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:uuid/uuid.dart';
-
-import 'package:dio/dio.dart';
 
 import 'package:get/get.dart';
 
@@ -19,6 +20,8 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
   final StorageLocalDatasource _storageDatasource =
       Get.find<StorageLocalDatasource>();
 
+  TokensDTO? tokens;
+
   Future<String> registerDevice() async {
     var uuid = const Uuid();
     var myUuid = uuid.v4();
@@ -29,42 +32,35 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
 
   @override
   Future<void> login() async {
-    if (kReleaseMode) {
-      var token = await _authDatasource.login();
-      _upvibeDatasource.setAccessToken(token);
-      await _upvibeDatasource.testConnection();
-    } else {
-      var token = _storageDatasource.getDebugAccessToken();
+    tokens ??= await _storageDatasource.getTokens();
 
-      if (token != null) {
-        try {
-          _upvibeDatasource.setAccessToken(token);
-          await _upvibeDatasource.testConnection();
-          debugPrint(token);
-          return;
-        } on DioException catch (ex) {
-          if (ex.type != DioExceptionType.badResponse) {
-            rethrow;
-          }
+    if (tokens == null) {
+      tokens = await _authDatasource.login();
+      await _storageDatasource.storeTokens(tokens!);
+    }
+
+    Map<String, dynamic> decodedAccessToken =
+        JwtDecoder.decode(tokens!.accessToken);
+    if (decodedAccessToken['exp'] * 1000 <
+        (DateTime.now().millisecondsSinceEpoch - 5000)) {
+      try {
+        tokens = await _authDatasource.refreshToken(tokens!.refreshToken);
+        await _storageDatasource.storeTokens(tokens!);
+      } on LoginFailure catch (e) {
+        if (e.type == LoginFailureType.invalidRefreshToken) {
+          tokens = await _authDatasource.login();
+          await _storageDatasource.storeTokens(tokens!);
+        } else {
+          rethrow;
         }
       }
-
-      token = await _authDatasource.login();
-
-      debugPrint(token);
-      _upvibeDatasource.setAccessToken(token);
-
-      var myUuid = await registerDevice();
-      await _storageDatasource.storeUuid(myUuid);
-
-      if (_storageDatasource.getUuid() == null) {
-        var myUuid = await registerDevice();
-        await _storageDatasource.storeUuid(myUuid);
-      }
-
-      await _upvibeDatasource.testConnection();
-      await _storageDatasource.storeDebugAccessToken(token);
     }
+
+    if (kDebugMode) {
+      debugPrint('Access token: ${tokens!.accessToken}');
+    }
+
+    _upvibeDatasource.setAccessToken(tokens!.accessToken);
   }
 
   @override

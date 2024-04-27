@@ -48,7 +48,11 @@ class HomeBinding implements Bindings {
       permanent: true,
     );
 
-    Get.lazyPut<AuthorizationRepository>(() => AuthorizationRepositoryImpl());
+    Get.put<AuthorizationRepository>(
+      AuthorizationRepositoryImpl(),
+      permanent: true,
+    );
+
     Get.lazyPut<StorageRepository>(() => StorageRepositoryImpl());
     Get.lazyPut<FileRepository>(() => FileRepositoryImpl());
     Get.lazyPut<AssetsRepository>(() => AssetsRepositoryImpl());
