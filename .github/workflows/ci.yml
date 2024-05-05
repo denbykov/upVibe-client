@@ -22,7 +22,8 @@ jobs:
         run: flutter pub get
         working-directory: client
       - name: Build
-        run: ls ../.ci/flutterAnalyze.ps1
+        shell: pwsh
+        run: ../.ci/flutterAnalyze.ps1
         working-directory: client
       # - name: Build debug
       #   run: flutter build apk --debug
