@@ -1,4 +1,4 @@
-name: learn-github-actions
+name: CI
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
@@ -13,3 +13,4 @@ jobs:
           channel: stable
           flutter-version-file: client/pubspec.yaml
       - run: flutter --version
+      - run: flutter doctor
