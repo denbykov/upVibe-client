@@ -1,5 +1,5 @@
 name: CI
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }} is learning G gitHub Actions
 on: [push]
 jobs:
   build:
@@ -12,6 +12,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '18'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Set up android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -23,4 +25,5 @@ jobs:
         with:
           channel: stable
           flutter-version-file: client/pubspec.yaml
-      - run: flutter doctor
+      - name: Check flutter doctor
+        run: flutter doctor
