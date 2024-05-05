@@ -38,6 +38,13 @@ class HomeDrawerWidget extends Drawer {
             onTap: () {
               _controller.navigateToFiles();
             },
+          ),
+          ListTile(
+            leading: const Icon(Icons.low_priority),
+            title: const Text('Mapping priority'),
+            onTap: () {
+              _controller.navigateToMappingPriority();
+            },
           )
         ],
       ),

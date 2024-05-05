@@ -6,6 +6,7 @@ import 'package:client/data/dto/etxended_file_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
 import 'package:client/data/dto/tag_dto.dart';
 import 'package:client/data/dto/tag_mapping_dto.dart';
+import 'package:client/data/dto/tag_mapping_priority_dto.dart';
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:dio/dio.dart';
 
@@ -36,8 +37,8 @@ UpvibeError throwErrorFromBadResponse(Response response) {
 
 class UpvibeRemoteDatasource {
   late Dio dio;
-  Function() ensureAuthorized = () {
-    getx.Get.find<AuthorizationRepository>().login();
+  Function() ensureAuthorized = () async {
+    await getx.Get.find<AuthorizationRepository>().login();
   };
 
   UpvibeRemoteDatasource() {
@@ -213,6 +214,40 @@ class UpvibeRemoteDatasource {
     try {
       await ensureAuthorized();
       await dio.put('v1/files/$fileId/tag-mapping', data: mapping.toJson());
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<TagMappingPriorityDTO> getTagMappingPriority() async {
+    try {
+      await ensureAuthorized();
+      var response = await dio.get('v1/tags/tag-mapping-priority');
+      var json = response.data;
+      return TagMappingPriorityDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> updateTagMappingPriority(TagMappingPriorityDTO priority) async {
+    try {
+      await ensureAuthorized();
+      await dio.put('v1/tags/tag-mapping-priority', data: priority.toJson());
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) {
         throw UpvibeTimeout();

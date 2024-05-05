@@ -9,4 +9,5 @@ class Routes {
   static const String addPlaylist = '/add/addPlaylist';
   static const String files = '/files';
   static const String file = '/file';
+  static const String mappingPriority = '/mappingPriority';
 }

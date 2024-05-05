@@ -4,6 +4,7 @@ import 'package:client/domain/repositories/assets_repository.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
 import 'package:client/feature/controllers/source_icon_controller.dart';
 import 'package:client/feature/file/controllers/file_controller.dart';
+import 'package:client/feature/home/controllers/mapping_priority_controller.dart';
 import 'package:get/get.dart';
 
 import 'package:client/feature/home/controllers/splash_screen_controller.dart';
@@ -64,6 +65,7 @@ class HomeBinding implements Bindings {
     Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<SettingsController>(() => SettingsController());
+    Get.lazyPut<MappingPriorityController>(() => MappingPriorityController());
     Get.lazyPut<AddController>(() => AddController());
 
     Get.lazyPut<AddFileController>(() => AddFileController());

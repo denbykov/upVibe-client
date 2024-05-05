@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:client/data/dto/tag_mapping_dto.dart';
+import 'package:client/data/dto/tag_mapping_priority_dto.dart';
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/entities/tag_mapping.dart';
+import 'package:client/domain/entities/tag_mapping_priority.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
 
 import 'package:client/data/remote/upvibe_remote_datasource.dart';
@@ -27,5 +29,17 @@ class TagRepositoryImpl extends TagRepository {
   Future<void> updateMapping(String fileId, TagMapping mapping) async {
     await _upvibeDatasource.updateMapping(
         fileId, TagMappingDTO.fromEntity(mapping));
+  }
+
+  @override
+  Future<TagMappingPriority> getTagMappingPriority() async {
+    final dto = await _upvibeDatasource.getTagMappingPriority();
+    return dto.toEntity();
+  }
+
+  @override
+  Future<void> updateTagMappingPriority(TagMappingPriority priority) async {
+    await _upvibeDatasource
+        .updateTagMappingPriority(TagMappingPriorityDTO.fromEntity(priority));
   }
 }

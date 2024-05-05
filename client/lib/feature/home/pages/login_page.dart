@@ -20,18 +20,28 @@ class LoginPage extends StatelessWidget {
   }
 
   Center buildContent() {
+    _controller.login();
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: () async {
-              await _controller.login();
+        children: [
+          Obx(
+            () {
+              if (_controller.loginFailed.isFalse) {
+                return const CircularProgressIndicator();
+              } else {
+                return ElevatedButton(
+                  onPressed: () async {
+                    await _controller.login();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(color: Colors.white)),
+                  child: const Text('Retry login'),
+                );
+              }
             },
-            style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(color: Colors.white)),
-            child: const Text('Login'),
-          )
+          ),
         ],
       ),
     );

@@ -76,7 +76,7 @@ class FilePage extends StatelessWidget {
             color: Colors.black,
             child: Obx(() {
               if (_controller.images.value == null) {
-                return const CircularProgressIndicator();
+                return const LinearProgressIndicator();
               }
 
               var items = _controller.images.value!

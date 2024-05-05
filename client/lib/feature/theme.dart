@@ -3,13 +3,13 @@ import 'package:material_color_utilities/material_color_utilities.dart';
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFFBE003E),
+  primary: Color.fromRGBO(190, 0, 62, 1),
   onPrimary: Color(0xFFFFFFFF),
-  primaryContainer: Color(0xFFFFDADB),
+  primaryContainer: Color.fromRGBO(255, 218, 219, 1),
   onPrimaryContainer: Color(0xFF40000F),
   secondary: Color(0xFF765658),
   onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: Color(0xFFFFDADB),
+  secondaryContainer: Color.fromRGBO(255, 218, 219, 1),
   onSecondaryContainer: Color(0xFF2C1517),
   tertiary: Color(0xFF775930),
   onTertiary: Color(0xFFFFFFFF),

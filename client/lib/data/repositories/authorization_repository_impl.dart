@@ -31,6 +31,15 @@ class AuthorizationRepositoryImpl extends AuthorizationRepository {
   }
 
   @override
+  Future<void> ensureDeviceRegistration() async {
+    var deviceId = _storageDatasource.getUuid();
+    if (deviceId == null) {
+      deviceId = await registerDevice();
+      await _storageDatasource.storeUuid(deviceId);
+    }
+  }
+
+  @override
   Future<void> login() async {
     tokens ??= await _storageDatasource.getTokens();
 

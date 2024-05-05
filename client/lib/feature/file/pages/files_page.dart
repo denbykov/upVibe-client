@@ -40,7 +40,7 @@ class FilesPage extends StatelessWidget {
                 return buildFileItem(snapshot.data![index]);
               });
         }
-        return const CircularProgressIndicator();
+        return const LinearProgressIndicator();
       },
     );
   }

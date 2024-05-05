@@ -11,6 +11,7 @@ import 'package:client/feature/home/pages/settings_page.dart';
 import 'package:client/feature/home/pages/add_page.dart';
 import 'package:client/feature/file/pages/add_file_page.dart';
 import 'package:client/feature/file/pages/files_page.dart';
+import 'package:client/feature/home/pages/mapping_priority_page.dart';
 
 class Pages {
   static final List<GetPage> pages = [
@@ -52,6 +53,11 @@ class Pages {
     GetPage(
       name: Routes.file,
       page: () => FilePage(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: Routes.mappingPriority,
+      page: () => MappingPriorityPage(),
       binding: HomeBinding(),
     )
   ];
