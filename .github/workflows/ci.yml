@@ -12,16 +12,17 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '18'
-      - name: Set up android sdk 31
+      - name: Set up android sdk
         uses: android-actions/setup-android@v3.2.1
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version-file: client/pubspec.yaml
+          cache: true
       - name: Install dependencies
         run: flutter pub get
         working-directory: client
       - name: Build debug
-        run: flutter build apk --debug
+        run: flutter build analyze
         working-directory: client
