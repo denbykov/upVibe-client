@@ -25,3 +25,9 @@ jobs:
           flutter-version-file: client/pubspec.yaml
       - name: Run flutter doctor
         run: flutter doctor -v 
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: client
+      - name: Build debug
+        run: flutter build apk --debug
+        working-directory: client
