@@ -33,11 +33,25 @@ class SettingsPage extends StatelessWidget {
         ));
   }
 
+  Widget buildToggleThemeButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: ElevatedButton(
+        onPressed: () {
+          Get.changeThemeMode(
+              Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+        },
+        child: const Text('Change theme'),
+      ),
+    );
+  }
+
   Widget buildContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         buildInfo(context),
+        buildToggleThemeButton(context),
       ],
     );
   }
