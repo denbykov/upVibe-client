@@ -1,5 +1,5 @@
 name: CI
-run-name: ${{ github.actor }} is learning G gitHub Actions
+run-name: ${{ github.actor }} is learning gitHub Actions
 on: [push]
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
         with:
           cmdline-tools-version: 11076708
       - name: Build sample android application
-        run: ./gradlew --no-daemon build
+        run: gradlew --no-daemon build
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
