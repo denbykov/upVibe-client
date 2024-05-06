@@ -2,11 +2,10 @@ name: ci-debug
 run-name: CI Debug
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, edited, reopened]
   push:
     branches: 
     - integration
-    - uvc-*
 jobs:
   build:
     runs-on: ubuntu-latest
