@@ -2,7 +2,10 @@ import 'package:client/domain/entities/extended_file.dart';
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/entities/tag_mapping.dart';
 import 'package:client/domain/repositories/file_repository.dart';
+import 'package:client/domain/repositories/storage_repository.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
+import 'package:client/exceptions/upvibe_error.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +25,7 @@ class FileController extends GetxController {
 
   final FileRepository _fileRepository = Get.find<FileRepository>();
   final TagRepository _tagRepository = Get.find<TagRepository>();
+  final StorageRepository _storageRepository = Get.find<StorageRepository>();
 
   final titleTagIndex = 0.obs;
   final artistTagIndex = 0.obs;
@@ -39,7 +43,17 @@ class FileController extends GetxController {
   }
 
   Future<void> loadFile() async {
-    extendedFile.value = await _fileRepository.getFile(_fileId);
+    try {
+      extendedFile.value = await _fileRepository.getFile(
+        _fileId,
+        _storageRepository.getDeviceId()!,
+      );
+    } on UpvibeError catch (e) {
+      debugPrint('${e.toString()}: ${e.errMsg()}');
+      Get.snackbar('Error', 'Something went wrong');
+      return;
+    }
+
     TagMapping mapping = extendedFile.value!.mapping!;
     titleTagIndex.value = int.parse(mapping.title) - 1;
     artistTagIndex.value = int.parse(mapping.artist) - 1;
@@ -50,16 +64,33 @@ class FileController extends GetxController {
   }
 
   Future<void> loadImage(String tagId, int position) async {
+    Uint8List? image;
+
+    try {
+      image = await _tagRepository.getImage(tagId);
+    } on UpvibeError catch (e) {
+      debugPrint('${e.toString()}: ${e.errMsg()}');
+      Get.snackbar('Error', 'Something went wrong');
+      return;
+    }
+
     images.value![position] = PictureInfo(
       tagId,
-      await _tagRepository.getImage(tagId),
+      image,
       '${position + 1}',
     );
     images.refresh();
   }
 
   Future<void> loadTags() async {
-    tags.value = await _tagRepository.getTagsForFile(_fileId);
+    try {
+      tags.value = await _tagRepository.getTagsForFile(_fileId);
+    } on UpvibeError catch (e) {
+      debugPrint('${e.toString()}: ${e.errMsg()}');
+      Get.snackbar('Error', 'Something went wrong');
+      return;
+    }
+
     images.value = [];
     for (final tag in tags.value!) {
       images.value!.add(PictureInfo(tag.id, null, tag.source));
@@ -106,6 +137,12 @@ class FileController extends GetxController {
       trackNumber: '${numberTagIndex.value + 1}',
       picture: '${imageTagIndex.value + 1}',
     );
-    await _tagRepository.updateMapping(_fileId, mapping);
+    try {
+      await _tagRepository.updateMapping(_fileId, mapping);
+    } on UpvibeError catch (e) {
+      debugPrint('${e.toString()}: ${e.errMsg()}');
+      Get.snackbar('Error', 'Something went wrong');
+      return;
+    }
   }
 }

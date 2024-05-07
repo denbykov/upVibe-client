@@ -28,10 +28,14 @@ class FilePage extends StatelessWidget {
           buldSourceHeader(context, file),
           Icon(Icons.file_open,
               color: Get.theme.colorScheme.secondary, size: 28.0),
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
-            child: const Icon(Icons.sync, color: Colors.green, size: 28.0),
-          ),
+          Builder(builder: (context) {
+            Color syncColor = file.isSynchronized ? Colors.green : Colors.red;
+
+            return Container(
+              padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
+              child: Icon(Icons.sync, color: syncColor, size: 28.0),
+            );
+          }),
         ],
       ),
     );
