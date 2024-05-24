@@ -17,14 +17,14 @@ class FileRepositoryImpl extends FileRepository {
   }
 
   @override
-  Future<List<File>> getFiles() async {
-    final files = await _upvibeDatasource.getFiles();
+  Future<List<File>> getFiles(String deviceId) async {
+    final files = await _upvibeDatasource.getFiles(deviceId);
     return files.map((dto) => dto.toEntity()).toList();
   }
 
   @override
-  Future<ExtendedFile> getFile(String id) async {
-    final extendedFile = await _upvibeDatasource.getFile(id);
+  Future<ExtendedFile> getFile(String id, String deviceId) async {
+    final extendedFile = await _upvibeDatasource.getFile(id, deviceId);
     return extendedFile.toEntity();
   }
 }

@@ -85,10 +85,15 @@ class UpvibeRemoteDatasource {
     }
   }
 
-  Future<List<FileDTO>> getFiles() async {
+  Future<List<FileDTO>> getFiles(String deviceId) async {
     try {
       await ensureAuthorized();
-      var response = await dio.get('v1/files');
+      var response = await dio.get(
+        'v1/files',
+        queryParameters: {
+          'deviceId': deviceId,
+        },
+      );
       var json = response.data;
       return (json as List).map((object) => FileDTO.fromJson(object)).toList();
     } on DioException catch (ex) {
@@ -101,12 +106,16 @@ class UpvibeRemoteDatasource {
     }
   }
 
-  Future<ExtendedFileDTO> getFile(String id) async {
+  Future<ExtendedFileDTO> getFile(String id, String deviceId) async {
     try {
       await ensureAuthorized();
-      var response = await dio.get('v1/files/$id', queryParameters: {
-        'expand': 'mapping',
-      });
+      var response = await dio.get(
+        'v1/files/$id',
+        queryParameters: {
+          'deviceId': deviceId,
+          'expand': 'mapping',
+        },
+      );
       var json = response.data;
       return ExtendedFileDTO.fromJson(json);
     } on DioException catch (ex) {

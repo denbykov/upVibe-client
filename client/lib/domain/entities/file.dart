@@ -21,6 +21,7 @@ class File {
   final Source source;
   final String status;
   final String sourceUrl;
+  final bool isSynchronized;
   final ShortTags? shortTags;
 
   const File({
@@ -28,6 +29,7 @@ class File {
     required this.source,
     required this.status,
     required this.sourceUrl,
+    required this.isSynchronized,
     required this.shortTags,
   });
 }

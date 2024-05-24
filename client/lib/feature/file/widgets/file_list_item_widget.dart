@@ -49,7 +49,11 @@ class FileListItemWidget extends StatelessWidget {
                 id: file.source.id,
               ),
             ),
-            const Icon(Icons.sync, color: Colors.green, size: 24.0),
+            Builder(builder: (context) {
+              var syncColor = file.isSynchronized ? Colors.green : Colors.red;
+
+              return Icon(Icons.sync, color: syncColor, size: 24.0);
+            }),
           ],
         ),
       ),

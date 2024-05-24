@@ -52,6 +52,7 @@ class FileDTO {
   final SourceDTO source;
   final String status;
   final String sourceUrl;
+  final bool isSynchronized;
   final ShortTagsDTO? shortTags;
 
   const FileDTO({
@@ -59,6 +60,7 @@ class FileDTO {
     required this.source,
     required this.status,
     required this.sourceUrl,
+    required this.isSynchronized,
     required this.shortTags,
   });
 
@@ -69,6 +71,7 @@ class FileDTO {
         'source': Map<String, dynamic> source,
         'status': String status,
         'sourceUrl': String sourceUrl,
+        'isSynchronized': bool isSynchronized,
         'tags': Map<String, dynamic>? shortTags,
       } =>
         FileDTO(
@@ -76,6 +79,7 @@ class FileDTO {
           source: SourceDTO.fromJson(source),
           status: status,
           sourceUrl: sourceUrl,
+          isSynchronized: isSynchronized,
           shortTags:
               shortTags != null ? ShortTagsDTO.fromJson(shortTags) : null,
         ),
@@ -89,6 +93,7 @@ class FileDTO {
       source: source.toEntity(),
       status: status,
       sourceUrl: sourceUrl,
+      isSynchronized: isSynchronized,
       shortTags: shortTags?.toEntity(),
     );
   }

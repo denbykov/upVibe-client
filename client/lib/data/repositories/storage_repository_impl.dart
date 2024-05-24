@@ -15,4 +15,9 @@ class StorageRepositoryImpl extends StorageRepository {
   String getAppVersion() {
     return _datasource.getAppVesrion();
   }
+
+  @override
+  String? getDeviceId() {
+    return _datasource.getUuid();
+  }
 }
