@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:client/domain/entities/tag_mapping_priority.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 final class Item extends LinkedListEntry<Item> {
