@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:client/data/dto/binary_file_dto.dart';
 import 'package:client/data/dto/file_dto.dart';
 import 'package:client/data/dto/etxended_file_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
@@ -44,6 +45,7 @@ class UpvibeRemoteDatasource {
   UpvibeRemoteDatasource() {
     dio = Dio(BaseOptions(
       connectTimeout: const Duration(seconds: 3),
+      receiveTimeout: const Duration(seconds: 120),
       baseUrl: 'https://10.0.2.2:3000/up-vibe/',
       responseType: ResponseType.json,
     ));
@@ -85,14 +87,25 @@ class UpvibeRemoteDatasource {
     }
   }
 
-  Future<List<FileDTO>> getFiles(String deviceId) async {
+  Future<List<FileDTO>> getFiles(String deviceId,
+      {List<String>? statuses, bool? isSynronized}) async {
     try {
       await ensureAuthorized();
+      final queryParameters = {
+        'deviceId': deviceId,
+      };
+
+      if (statuses != null) {
+        queryParameters['statuses'] = statuses.join(',');
+      }
+
+      if (isSynronized != null) {
+        queryParameters['synchronized'] = isSynronized.toString();
+      }
+
       var response = await dio.get(
         'v1/files',
-        queryParameters: {
-          'deviceId': deviceId,
-        },
+        queryParameters: queryParameters,
       );
       var json = response.data;
       return (json as List).map((object) => FileDTO.fromJson(object)).toList();
@@ -257,6 +270,49 @@ class UpvibeRemoteDatasource {
     try {
       await ensureAuthorized();
       await dio.put('v1/tags/tag-mapping-priority', data: priority.toJson());
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<BinaryFileDTO> downloadFile(String id) async {
+    try {
+      await ensureAuthorized();
+      var response = await dio.get('v1/files/$id/download',
+          options: Options(
+            responseType: ResponseType.bytes,
+          ));
+      final filename =
+          response.headers['Content-Disposition']!.first.split('filename=')[1];
+      return BinaryFileDTO(filename, response.data, 'Audio/mp3');
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) {
+        throw UpvibeTimeout();
+      }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> confirmFile(String id, String deviceId) async {
+    try {
+      await ensureAuthorized();
+      await dio.post(
+        'v1/files/$id/confirm',
+        queryParameters: {
+          'deviceId': deviceId,
+        },
+      );
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) {
         throw UpvibeTimeout();

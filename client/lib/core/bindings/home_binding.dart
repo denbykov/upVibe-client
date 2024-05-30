@@ -1,3 +1,5 @@
+import 'package:client/feature/controllers/lifecycle_controller.dart';
+
 import 'package:client/data/repositories/assets_repository_impl.dart';
 import 'package:client/data/repositories/tag_repository_impl.dart';
 import 'package:client/domain/repositories/assets_repository.dart';
@@ -18,6 +20,8 @@ import 'package:client/feature/file/controllers/add_file_controller.dart';
 import 'package:client/feature/file/controllers/files_controller.dart';
 import 'package:client/feature/file/controllers/file_list_item_controller.dart';
 
+import 'package:client/domain/use_cases/syncronization_use_case.dart';
+
 import 'package:client/domain/repositories/authorization_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
 import 'package:client/domain/repositories/file_repository.dart';
@@ -27,6 +31,7 @@ import 'package:client/data/repositories/storage_repository_impl.dart';
 import 'package:client/data/repositories/file_repository_impl.dart';
 
 import 'package:client/data/local/storage_local_datasource.dart';
+import 'package:client/data/local/upvibe_local_datasource.dart';
 
 import 'package:client/data/remote/authorization_remote_datasource.dart';
 import 'package:client/data/remote/upvibe_remote_datasource.dart';
@@ -36,6 +41,11 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<StorageLocalDatasource>(
       StorageLocalDatasource(),
+      permanent: true,
+    );
+
+    Get.put<UpvibeLocalDatasource>(
+      UpvibeLocalDatasource(),
       permanent: true,
     );
 
@@ -59,7 +69,12 @@ class HomeBinding implements Bindings {
     Get.lazyPut<AssetsRepository>(() => AssetsRepositoryImpl());
     Get.lazyPut<TagRepository>(() => TagRepositoryImpl());
 
+    Get.lazyPut<SynchronizationUseCase>(() => SynchronizationUseCase());
+
+    Get.put(LifeCycleController());
+
     Get.lazyPut<SplashScreenController>(() => SplashScreenController());
+
     Get.create<SourceIconController>(() => SourceIconController());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<HomeDrawerController>(() => HomeDrawerController());

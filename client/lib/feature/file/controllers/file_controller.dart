@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:client/core/services/synchronization_service.dart';
 import 'package:client/domain/entities/extended_file.dart';
+import 'package:client/domain/entities/synchronization_report.dart';
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/entities/tag_mapping.dart';
 import 'package:client/domain/repositories/file_repository.dart';
@@ -34,12 +38,43 @@ class FileController extends GetxController {
   final numberTagIndex = 0.obs;
   final imageTagIndex = 0.obs;
 
+  Timer? _timer;
+
+  StreamSubscription<SynchronizationReport>? _synchronizationSubscription;
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     _fileId = Get.arguments['id'];
-    loadFile();
-    loadTags();
+
+    _synchronizationSubscription = SynchronizationService()
+        .stream
+        .listen((SynchronizationReport data) async {
+      if (data.synchronizedFiles.contains(_fileId)) {
+        await loadFile();
+        await loadTags();
+      }
+    });
+
+    await loadFile();
+    await loadTags();
+
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      if (extendedFile.value == null ||
+          extendedFile.value!.file.status != 'C') {
+        await loadFile();
+        await loadTags();
+      } else {
+        _timer?.cancel();
+        _timer = null;
+      }
+    });
+  }
+
+  void stop() {
+    _synchronizationSubscription?.cancel();
+    _timer?.cancel();
   }
 
   Future<void> loadFile() async {
@@ -66,6 +101,10 @@ class FileController extends GetxController {
   Future<void> loadImage(String tagId, int position) async {
     Uint8List? image;
 
+    if (images.value!.elementAt(position).image != null) {
+      return;
+    }
+
     try {
       image = await _tagRepository.getImage(tagId);
     } on UpvibeError catch (e) {
@@ -74,11 +113,13 @@ class FileController extends GetxController {
       return;
     }
 
-    images.value![position] = PictureInfo(
+    final pictureInfo = PictureInfo(
       tagId,
       image,
       '${position + 1}',
     );
+
+    images.value![position] = pictureInfo;
     images.refresh();
   }
 
@@ -91,10 +132,17 @@ class FileController extends GetxController {
       return;
     }
 
-    images.value = [];
-    for (final tag in tags.value!) {
-      images.value!.add(PictureInfo(tag.id, null, tag.source));
-      loadImage(tag.id, images.value!.length - 1);
+    images.value ??= [];
+
+    if (images.value!.length != tags.value!.length) {
+      for (final tag in tags.value!) {
+        images.value!.add(PictureInfo(tag.id, null, tag.source));
+        await loadImage(tag.id, images.value!.length - 1);
+      }
+    } else {
+      for (final tag in tags.value!) {
+        await loadImage(tag.id, images.value!.length - 1);
+      }
     }
   }
 

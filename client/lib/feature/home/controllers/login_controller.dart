@@ -21,7 +21,7 @@ class LoginController extends GetxController {
 
   Future<void> login() async {
     try {
-      await _storageRepository.initialize();
+      await _storageRepository.ensureInitialized();
 
       await _repository.login();
       await ensureDeviceRegistration();

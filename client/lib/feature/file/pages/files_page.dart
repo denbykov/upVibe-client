@@ -10,7 +10,7 @@ import 'package:client/feature/widgets/app_scaffold_widget.dart';
 import 'package:client/feature/file/controllers/files_controller.dart';
 
 class FilesPage extends StatelessWidget {
-  final FilesController _filesController = Get.find<FilesController>();
+  final FilesController _controller = Get.find<FilesController>();
   final String _title = 'Files';
 
   FilesPage({super.key});
@@ -26,30 +26,30 @@ class FilesPage extends StatelessWidget {
   }
 
   Widget buildContent(BuildContext context) {
-    return FutureBuilder(
-      future: _filesController.getFiles(),
-      builder: (context, AsyncSnapshot<List<File>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == null) {
-            return const Center(child: Text('Something went wrong'));
-          }
-
-          return ListView.builder(
-              itemCount: snapshot.data?.length ?? 0,
-              itemBuilder: (context, index) {
-                return buildFileItem(snapshot.data![index]);
-              });
-        }
+    return Obx(() {
+      if (_controller.files.value == null) {
         return const LinearProgressIndicator();
-      },
-    );
+      }
+
+      return ListView.builder(
+          itemCount: _controller.files.value?.length ?? 0,
+          itemBuilder: (context, index) {
+            return buildFileItem(_controller.files.value![index]);
+          });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWidget(
-      title: _title,
-      body: buildContent(context),
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) async {
+        _controller.stop();
+      },
+      child: AppScaffoldWidget(
+        title: _title,
+        body: buildContent(context),
+      ),
     );
   }
 }
