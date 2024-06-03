@@ -13,7 +13,13 @@ abstract class StorageRepository {
 
   Future<void> storeDefaultFilePath(String? path);
 
-  Future<void> setAppStatus(bool isActive);
+  Future<String?> openSelectDirectoryDialog();
 
-  bool? isAppActive();
+  Future<void> storeInBrightMode(bool isBright);
+
+  bool? getInBrightMode();
+
+  Future<void> storeLastSynchronization(DateTime dateTime);
+
+  DateTime? getLastSynchronization();
 }

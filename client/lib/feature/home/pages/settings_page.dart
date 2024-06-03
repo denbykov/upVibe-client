@@ -12,36 +12,51 @@ class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});
 
   Widget buildInfo(BuildContext context) {
-    return Card(
-        color: Theme.of(context).colorScheme.tertiaryContainer,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 4, 16),
-                child: Icon(Icons.info,
-                    color: Theme.of(context).colorScheme.onTertiaryContainer)),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
-              child: Text(
-                'upVibe client v: ${_controller.version}',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onTertiaryContainer),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      child: Card(
+          color: Theme.of(context).colorScheme.tertiaryContainer,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 4, 16),
+                  child: Icon(Icons.info,
+                      color:
+                          Theme.of(context).colorScheme.onTertiaryContainer)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
+                child: Text(
+                  'upVibe client v: ${_controller.version}',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onTertiaryContainer),
+                ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 
   Widget buildToggleThemeButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: ElevatedButton(
         onPressed: () {
-          Get.changeThemeMode(
-              Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+          _controller.toggleTheme();
         },
         child: const Text('Change theme'),
+      ),
+    );
+  }
+
+  Widget buildDownloadDirectoryButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: ElevatedButton(
+        onPressed: () async {
+          await _controller.changeDownloadDirectory();
+        },
+        child: const Text('Change download directory'),
       ),
     );
   }
@@ -52,6 +67,7 @@ class SettingsPage extends StatelessWidget {
       children: [
         buildInfo(context),
         buildToggleThemeButton(context),
+        buildDownloadDirectoryButton(context),
       ],
     );
   }

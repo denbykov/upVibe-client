@@ -51,12 +51,27 @@ class StorageRepositoryImpl extends StorageRepository {
   }
 
   @override
-  Future<void> setAppStatus(bool isActive) async {
-    await _datasource.setAppStatus(isActive);
+  Future<String?> openSelectDirectoryDialog() async {
+    return await _datasource.openSelectDirectoryDialog();
   }
 
   @override
-  bool? isAppActive() {
-    return _datasource.getAppStatus();
+  Future<void> storeInBrightMode(bool isBright) async {
+    await _datasource.storeIsBrightMode(isBright);
+  }
+
+  @override
+  bool? getInBrightMode() {
+    return _datasource.getIsBrightMode();
+  }
+
+  @override
+  Future<void> storeLastSynchronization(DateTime dateTime) async {
+    await _datasource.storeLastSynchronization(dateTime);
+  }
+
+  @override
+  DateTime? getLastSynchronization() {
+    return _datasource.getLastSynchronization();
   }
 }

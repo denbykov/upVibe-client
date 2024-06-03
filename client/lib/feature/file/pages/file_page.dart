@@ -269,6 +269,7 @@ class TextTagCarouselSlider extends StatelessWidget {
                   child: Center(
                     child: Text(
                       '${item['text']!}',
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Theme.of(context)
                                 .colorScheme

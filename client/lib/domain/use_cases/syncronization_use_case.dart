@@ -43,6 +43,10 @@ class SynchronizationUseCase {
       await _showStatusNotification(report, done: true);
     }
 
+    await _storageRepository.storeLastSynchronization(
+      DateTime.now(),
+    );
+
     return report;
   }
 

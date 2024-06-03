@@ -47,14 +47,18 @@ class FileController extends GetxController {
     super.onInit();
     _fileId = Get.arguments['id'];
 
-    _synchronizationSubscription = SynchronizationService()
-        .stream
-        .listen((SynchronizationReport data) async {
-      if (data.synchronizedFiles.contains(_fileId)) {
-        await loadFile();
-        await loadTags();
-      }
-    });
+    _synchronizationSubscription = SynchronizationService().stream.listen(
+      (SynchronizationReport data) async {
+        try {
+          if (data.synchronizedFiles.contains(_fileId)) {
+            await loadFile();
+            await loadTags();
+          }
+        } catch (e) {
+          debugPrint('Someting went wrong: $e');
+        }
+      },
+    );
 
     await loadFile();
     await loadTags();
@@ -63,8 +67,12 @@ class FileController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       if (extendedFile.value == null ||
           extendedFile.value!.file.status != 'C') {
-        await loadFile();
-        await loadTags();
+        try {
+          await loadFile();
+          await loadTags();
+        } catch (e) {
+          debugPrint('Someting went wrong: $e');
+        }
       } else {
         _timer?.cancel();
         _timer = null;
@@ -98,7 +106,7 @@ class FileController extends GetxController {
     imageTagIndex.value = int.parse(mapping.picture) - 1;
   }
 
-  Future<void> loadImage(String tagId, int position) async {
+  Future<void> updateImage(String tagId, int position) async {
     Uint8List? image;
 
     if (images.value!.elementAt(position).image != null) {
@@ -132,16 +140,34 @@ class FileController extends GetxController {
       return;
     }
 
-    images.value ??= [];
+    if (images.value == null || images.value!.length != tags.value!.length) {
+      final newImages = <PictureInfo>[];
 
-    if (images.value!.length != tags.value!.length) {
-      for (final tag in tags.value!) {
-        images.value!.add(PictureInfo(tag.id, null, tag.source));
-        await loadImage(tag.id, images.value!.length - 1);
+      for (int i = 0; i < tags.value!.length; i++) {
+        final tag = tags.value!.elementAt(i);
+
+        try {
+          final image = await _tagRepository.getImage(tag.id);
+
+          final pictureInfo = PictureInfo(
+            tag.id,
+            image,
+            '${i + 1}',
+          );
+
+          newImages.add(pictureInfo);
+        } on UpvibeError catch (e) {
+          debugPrint('${e.toString()}: ${e.errMsg()}');
+          Get.snackbar('Error', 'Something went wrong');
+          return;
+        }
       }
+
+      images.value = newImages;
     } else {
-      for (final tag in tags.value!) {
-        await loadImage(tag.id, images.value!.length - 1);
+      for (int i = 0; i < tags.value!.length; i++) {
+        final tag = tags.value!.elementAt(i);
+        await updateImage(tag.id, i);
       }
     }
   }
@@ -187,6 +213,9 @@ class FileController extends GetxController {
     );
     try {
       await _tagRepository.updateMapping(_fileId, mapping);
+
+      await loadFile();
+      await loadTags();
     } on UpvibeError catch (e) {
       debugPrint('${e.toString()}: ${e.errMsg()}');
       Get.snackbar('Error', 'Something went wrong');

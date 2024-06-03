@@ -14,18 +14,45 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWidget(
-      title: _title,
-      body: buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _controller.navigateToAdd();
-        },
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
-      ),
-      drawer: HomeDrawerWidget(),
-    );
+    _controller.initialize();
+
+    return Obx(() {
+      if (_controller.defaultFilePathIsSet.isTrue) {
+        return AppScaffoldWidget(
+          title: _title,
+          body: buildBody(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              _controller.navigateToAdd();
+            },
+            tooltip: 'Add',
+            child: const Icon(Icons.add),
+          ),
+          drawer: HomeDrawerWidget(),
+        );
+      } else {
+        return AppScaffoldWidget(
+          title: _title,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Please set the defatult download directory!',
+                  style: Get.textTheme.titleMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await _controller.changeDownloadDirectory();
+                  },
+                  child: const Text('Do it!'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    });
   }
 
   Center buildBody() {

@@ -27,13 +27,17 @@ class FilesController extends GetxController {
 
     files.value = await getFiles();
 
-    _synchronizationSubscription = SynchronizationService()
-        .stream
-        .listen((SynchronizationReport data) async {
-      if (data.total > 0) {
-        files.value = await getFiles();
-      }
-    });
+    _synchronizationSubscription = SynchronizationService().stream.listen(
+      (SynchronizationReport data) async {
+        try {
+          if (data.total > 0) {
+            files.value = await getFiles();
+          }
+        } catch (e) {
+          debugPrint('Someting went wrong: $e');
+        }
+      },
+    );
   }
 
   Future<List<File>> getFiles() async {

@@ -64,7 +64,11 @@ class HomeBinding implements Bindings {
       permanent: true,
     );
 
-    Get.lazyPut<StorageRepository>(() => StorageRepositoryImpl());
+    Get.put<StorageRepository>(
+      StorageRepositoryImpl(),
+      permanent: true,
+    );
+
     Get.lazyPut<FileRepository>(() => FileRepositoryImpl());
     Get.lazyPut<AssetsRepository>(() => AssetsRepositoryImpl());
     Get.lazyPut<TagRepository>(() => TagRepositoryImpl());

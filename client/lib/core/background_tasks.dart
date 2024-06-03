@@ -12,6 +12,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 const syncrhonizationTask = "syncrhonizationTask";
 
+const synchronizationInterval = Duration(minutes: 15);
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -46,9 +48,11 @@ Future<bool> _synchronizationTask() async {
     final storageRepository = Get.find<StorageRepository>();
     await storageRepository.ensureInitialized();
 
-    final isAppActive = storageRepository.isAppActive();
+    final lastSyncrhonizationTime = storageRepository.getLastSynchronization();
 
-    if (isAppActive == null || isAppActive) {
+    if (lastSyncrhonizationTime != null &&
+        DateTime.now().difference(lastSyncrhonizationTime).inMinutes <
+            synchronizationInterval.inMinutes) {
       return true;
     }
 
@@ -86,8 +90,8 @@ Future<void> initialize() async {
   Workmanager().registerPeriodicTask(
     syncrhonizationTask,
     syncrhonizationTask,
-    initialDelay: const Duration(seconds: 10),
-    frequency: const Duration(minutes: 15),
+    initialDelay: synchronizationInterval,
+    frequency: synchronizationInterval,
     existingWorkPolicy: ExistingWorkPolicy.update,
   );
 }

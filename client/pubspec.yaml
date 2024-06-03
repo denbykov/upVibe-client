@@ -55,6 +55,7 @@ dependencies:
   workmanager: ^0.5.2
   sqflite: ^2.3.2
   path: ^1.8.3
+  filesystem_picker: ^4.1.0
 
 dev_dependencies:
   flutter_test:

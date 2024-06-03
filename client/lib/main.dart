@@ -4,6 +4,8 @@ import 'package:client/core/bindings/home_binding.dart';
 
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -18,5 +20,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HomeBinding().dependencies();
 
-  runApp(const App());
+  final prefs = await SharedPreferences.getInstance();
+  final inBrightMode = prefs.getBool('inBrightMode') ?? true;
+
+  runApp(App(inBrightMode: inBrightMode));
 }
