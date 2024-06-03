@@ -1,0 +1,9 @@
+const query = '''
+CREATE TABLE files (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  remoteId INTEGER NOT NULL UNIQUE,
+  path TEXT NOT NULL UNIQUE,
+  createdAt DATETIME NOT NULL,
+  updatedAt DATETIME NOT NULL
+);
+''';

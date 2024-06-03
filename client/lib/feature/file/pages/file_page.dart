@@ -169,21 +169,27 @@ class FilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWidget(
-      title: _title,
-      body: buildContent(context),
-      appBarActions: [
-        IconButton(
-          icon: const Icon(Icons.done),
-          onPressed: () => _controller.onSaveTapped(),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).colorScheme.onPrimaryContainer),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).colorScheme.primaryContainer),
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) async {
+        _controller.stop();
+      },
+      child: AppScaffoldWidget(
+        title: _title,
+        body: buildContent(context),
+        appBarActions: [
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () => _controller.onSaveTapped(),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).colorScheme.onPrimaryContainer),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).colorScheme.primaryContainer),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -263,6 +269,7 @@ class TextTagCarouselSlider extends StatelessWidget {
                   child: Center(
                     child: Text(
                       '${item['text']!}',
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Theme.of(context)
                                 .colorScheme

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/app.dart';
+import 'package:client/core/bindings/home_binding.dart';
 
 import 'dart:io';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -14,5 +17,11 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const App());
+  WidgetsFlutterBinding.ensureInitialized();
+  HomeBinding().dependencies();
+
+  final prefs = await SharedPreferences.getInstance();
+  final inBrightMode = prefs.getBool('inBrightMode') ?? true;
+
+  runApp(App(inBrightMode: inBrightMode));
 }
