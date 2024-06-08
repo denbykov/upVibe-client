@@ -34,6 +34,9 @@ jobs:
          echo "AUTH0_CLIENT_ID=clientId" >> secrets.env && 
          echo "AUTH0_AUDIENCE=audience" >> secrets.env 
         working-directory: client
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+        working-directory: client
       - name: Static analysis
         run: chmod +x ../.ci/flutterAnalyze.sh && ../.ci/flutterAnalyze.sh
         working-directory: client
