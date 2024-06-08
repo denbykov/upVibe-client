@@ -5,6 +5,8 @@ import 'package:client/exceptions/login_failure.dart';
 import 'package:client/data/dto/tokens_dto.dart';
 import 'package:dio/dio.dart';
 
+import 'package:client/env.dart';
+
 const appScheme = 'flutterdemo';
 
 class AuthorizationRemoteDatasource {
@@ -12,10 +14,10 @@ class AuthorizationRemoteDatasource {
   late Dio _dio;
 
   AuthorizationRemoteDatasource() {
-    _auth0 = Auth0('up-vibe.eu.auth0.com', 'NsrwVzfSOpezBAZAwn10LytMShLlpKlf');
+    _auth0 = Auth0(Env.auth0Domain, 'NsrwVzfSOpezBAZAwn10LytMShLlpKlf');
     _dio = Dio(BaseOptions(
       connectTimeout: const Duration(seconds: 3),
-      baseUrl: 'https://up-vibe.eu.auth0.com/oauth/',
+      baseUrl: 'https://${Env.auth0Domain}/oauth/',
       responseType: ResponseType.json,
     ));
     _dio.options.headers['content-type'] = 'application/x-www-form-urlencoded';
@@ -24,7 +26,7 @@ class AuthorizationRemoteDatasource {
   Future<TokensDTO> login() async {
     try {
       var credentials = await _auth0.webAuthentication(scheme: appScheme).login(
-          audience: 'volodymyr-test-null',
+          audience: Env.auth0Audience,
           scopes: {'openid', 'profile', 'email', 'offline_access'});
 
       return TokensDTO(
@@ -39,7 +41,7 @@ class AuthorizationRemoteDatasource {
     try {
       var response = await _dio.post('token', data: {
         'grant_type': 'refresh_token',
-        'client_id': 'NsrwVzfSOpezBAZAwn10LytMShLlpKlf',
+        'client_id': Env.auth0ClientId,
         'refresh_token': refreshToken
       });
       var json = response.data;

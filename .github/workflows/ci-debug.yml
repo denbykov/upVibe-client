@@ -27,6 +27,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         working-directory: client
+      - name: Create secrets.env
+        run: >
+         touch secrets.env && 
+         echo "AUTH0_DOMAIN=domain" >> secrets.env && 
+         echo "AUTH0_CLIENT_ID=clientId" >> secrets.env && 
+         echo "AUTH0_AUDIENCE=audience" >> secrets.env 
+        working-directory: client
       - name: Static analysis
         run: chmod +x ../.ci/flutterAnalyze.sh && ../.ci/flutterAnalyze.sh
         working-directory: client
