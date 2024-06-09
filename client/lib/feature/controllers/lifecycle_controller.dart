@@ -3,11 +3,6 @@ import 'package:get/get.dart';
 
 class LifeCycleController extends SuperController {
   @override
-  void onInit() async {
-    super.onInit();
-  }
-
-  @override
   void onHidden() async {
     SynchronizationService().stop();
   }

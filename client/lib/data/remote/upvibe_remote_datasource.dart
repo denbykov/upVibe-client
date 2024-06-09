@@ -46,7 +46,7 @@ class UpvibeRemoteDatasource {
     dio = Dio(BaseOptions(
       connectTimeout: const Duration(seconds: 3),
       receiveTimeout: const Duration(seconds: 120),
-      baseUrl: 'https://10.0.2.2:3000/up-vibe/',
+      baseUrl: 'https://95.217.163.133:3000/up-vibe/',
       responseType: ResponseType.json,
     ));
   }

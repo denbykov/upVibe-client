@@ -1,14 +1,10 @@
-name: ci-debug
-run-name: CI Debug
-on:
-  pull_request:
-    branches:
-    - integration
-    - 'release/**'
+name: Create and publish an apk to the assets
+
+on: 
   push:
-    branches: 
-    - integration
-    - 'release/**'
+    tags:
+    - '*'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,11 +26,15 @@ jobs:
         run: flutter pub get
         working-directory: client
       - name: Create secrets.env
+        env:
+          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+          AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
         run: >
          touch secrets.env && 
-         echo "AUTH0_DOMAIN=domain" >> secrets.env && 
-         echo "AUTH0_CLIENT_ID=clientId" >> secrets.env && 
-         echo "AUTH0_AUDIENCE=audience" >> secrets.env 
+         echo "AUTH0_DOMAIN=$AUTH0_DOMAIN" >> secrets.env && 
+         echo "AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID" >> secrets.env && 
+         echo "AUTH0_AUDIENCE=$AUTH0_AUDIENCE" >> secrets.env 
         working-directory: client
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
@@ -43,5 +43,10 @@ jobs:
         run: chmod +x ../.ci/flutterAnalyze.sh && ../.ci/flutterAnalyze.sh
         working-directory: client
       - name: Build
-        run: flutter build apk --debug
+        run: flutter build apk
         working-directory: client
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: "client/build/app/outputs/flutter-apk/app-release.apk"
