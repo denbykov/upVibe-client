@@ -14,7 +14,7 @@ class AuthorizationRemoteDatasource {
   late Dio _dio;
 
   AuthorizationRemoteDatasource() {
-    _auth0 = Auth0(Env.auth0Domain, 'NsrwVzfSOpezBAZAwn10LytMShLlpKlf');
+    _auth0 = Auth0(Env.auth0Domain, Env.auth0ClientId);
     _dio = Dio(BaseOptions(
       connectTimeout: const Duration(seconds: 3),
       baseUrl: 'https://${Env.auth0Domain}/oauth/',
