@@ -30,12 +30,12 @@ class FileListItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    file.shortTags!.title!,
+                    file.shortTags?.title ?? 'N/A',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
-                    file.shortTags!.artist!,
+                    file.shortTags?.artist ?? 'N/A',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),

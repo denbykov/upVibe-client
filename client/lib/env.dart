@@ -11,4 +11,7 @@ abstract class Env {
 
   @EnviedField(varName: 'AUTH0_AUDIENCE', obfuscate: true)
   static final String auth0Audience = _Env.auth0Audience;
+
+  @EnviedField(varName: 'UP_VIBE_SERVER_IP', obfuscate: true)
+  static final String upVibeServerIp = _Env.upVibeServerIp;
 }

@@ -36,7 +36,8 @@ jobs:
          touch secrets.env && 
          echo "AUTH0_DOMAIN=$AUTH0_DOMAIN" >> secrets.env && 
          echo "AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID" >> secrets.env && 
-         echo "AUTH0_AUDIENCE=$AUTH0_AUDIENCE" >> secrets.env 
+         echo "AUTH0_AUDIENCE=$AUTH0_AUDIENCE" >> secrets.env &&
+         echo "UP_VIBE_SERVER_IP=$UP_VIBE_SERVER_IP" >> secrets.env
         working-directory: client
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
