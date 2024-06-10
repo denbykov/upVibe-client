@@ -62,7 +62,7 @@ jobs:
         run: chmod +x ../.ci/flutterAnalyze.sh && ../.ci/flutterAnalyze.sh
         working-directory: client
       - name: Build
-        run: flutter build apk
+        run: flutter build apk --no-shrink --split-per-abi
         working-directory: client
       - name: Create release
         uses: ncipollo/release-action@v1
