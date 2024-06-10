@@ -17,6 +17,8 @@ import 'package:client/exceptions/upvibe_error.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart' as getx;
 
+import 'package:client/env.dart';
+
 const appScheme = 'flutterdemo';
 
 UpvibeError throwErrorFromBadResponse(Response response) {
@@ -46,7 +48,7 @@ class UpvibeRemoteDatasource {
     dio = Dio(BaseOptions(
       connectTimeout: const Duration(seconds: 3),
       receiveTimeout: const Duration(seconds: 120),
-      baseUrl: 'https://95.217.163.133:3000/up-vibe/',
+      baseUrl: 'https://${Env.upVibeServerIp}:3000/up-vibe/',
       responseType: ResponseType.json,
     ));
   }

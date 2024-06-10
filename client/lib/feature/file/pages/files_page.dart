@@ -18,11 +18,8 @@ class FilesPage extends StatelessWidget {
   Widget buildFileItem(File file) {
     if (file.shortTags != null &&
         file.shortTags!.artist != null &&
-        file.shortTags!.artist != null) {
-      return FileListItemWidget(file: file);
-    }
-
-    return Text(file.sourceUrl);
+        file.shortTags!.artist != null) {}
+    return FileListItemWidget(file: file);
   }
 
   Widget buildContent(BuildContext context) {
