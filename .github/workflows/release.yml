@@ -27,6 +27,22 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         working-directory: client
+      - name: Decode and save keystore
+        env:
+          KEYSTORE_JKS_B64: ${{ secrets.KEYSTORE_JKS_B64 }}
+        run: |
+          echo $KEYSTORE_JKS_B64 | base64 --decode > upload-keystore.jks
+        working-directory: client/android
+      - name: Create key.properties file
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: >
+         touch key.properties && 
+         echo "storePassword=$KEYSTORE_PASSWORD" >> key.properties && 
+         echo "keyAlias=upload" >> key.properties && 
+         echo "keyPassword=$KEYSTORE_PASSWORD" && >> key.properties
+         echo "storeFile=upload-keystore.jks" >> key.properties
+        working-directory: client/android
       - name: Create secrets.env
         env:
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
