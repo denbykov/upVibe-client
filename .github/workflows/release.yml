@@ -31,7 +31,7 @@ jobs:
         env:
           KEYSTORE_JKS_B64: ${{ secrets.KEYSTORE_JKS_B64 }}
         run: |
-          echo $KEYSTORE_JKS_B64 | base64 --decode > upload-keystore.jks
+          echo -n $KEYSTORE_JKS_B64 | base64 --decode > upload-keystore.jks
         working-directory: client/android
       - name: Create key.properties file
         env:
