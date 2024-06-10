@@ -41,7 +41,7 @@ jobs:
          echo "storePassword=$KEYSTORE_PASSWORD" >> key.properties && 
          echo "keyAlias=upload" >> key.properties && 
          echo "keyPassword=$KEYSTORE_PASSWORD" && >> key.properties
-         echo "storeFile=upload-keystore.jks" >> key.properties
+         echo "storeFile=/home/runner/work/upVibe-client/upVibe-client/client/android/upload-keystore.jks" >> key.properties
         working-directory: client/android
       - name: Create secrets.env
         env:
