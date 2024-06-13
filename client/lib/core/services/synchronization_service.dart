@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:client/domain/repositories/storage_repository.dart';
 import 'package:get/get.dart';
 
 import 'package:client/domain/use_cases/syncronization_use_case.dart';
@@ -9,6 +10,8 @@ class SynchronizationService {
   static final SynchronizationService _instance =
       SynchronizationService._internal();
   factory SynchronizationService() => _instance;
+
+  final StorageRepository _storageRepository = Get.find<StorageRepository>();
 
   final useCase = Get.find<SynchronizationUseCase>();
 
@@ -28,6 +31,11 @@ class SynchronizationService {
       }
 
       syncInProgress = true;
+
+      if (_storageRepository.getDefaultFilePath() == null) {
+        return;
+      }
+
       await _synchronize();
       syncInProgress = false;
     });

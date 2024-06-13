@@ -20,8 +20,6 @@ class StorageRepositoryImpl extends StorageRepository {
     await _datasource.initialize();
     await _upvibeLocalDatasource.initialize();
 
-    await storeDefaultFilePath('/storage/emulated/0/Download/');
-
     isInitialized = true;
   }
 

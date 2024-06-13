@@ -48,6 +48,10 @@ Future<bool> _synchronizationTask() async {
     final storageRepository = Get.find<StorageRepository>();
     await storageRepository.ensureInitialized();
 
+    if (storageRepository.getDefaultFilePath() == null) {
+      return true;
+    }
+
     final lastSyncrhonizationTime = storageRepository.getLastSynchronization();
 
     if (lastSyncrhonizationTime != null &&

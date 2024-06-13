@@ -106,7 +106,8 @@ class StorageLocalDatasource {
   }
 
   String? getDefaultFilePath() {
-    return _prefs.getString(StorageKeys.defaultFilePath);
+    final path = _prefs.getString(StorageKeys.defaultFilePath);
+    return path;
   }
 
   Future<String?> openSelectDirectoryDialog() async {
