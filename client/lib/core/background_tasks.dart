@@ -35,7 +35,7 @@ void callbackDispatcher() {
       debugPrint('Unknown task: $task');
       return Future.value(false);
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('synchronizaiton error ${e.toString()}');
       return Future.value(false);
     }
   });

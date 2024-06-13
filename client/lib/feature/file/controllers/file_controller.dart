@@ -95,6 +95,10 @@ class FileController extends GetxController {
       debugPrint('${e.toString()}: ${e.errMsg()}');
       Get.snackbar('Error', 'Something went wrong');
       return;
+    } on Exception catch (e) {
+      debugPrint('Something went wrong: $e');
+      Get.snackbar('Error', 'Something went wrong');
+      return;
     }
 
     TagMapping mapping = extendedFile.value!.mapping!;

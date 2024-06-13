@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:client/domain/repositories/storage_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import 'package:client/domain/use_cases/syncronization_use_case.dart';
@@ -47,8 +48,12 @@ class SynchronizationService {
   }
 
   Future<void> _synchronize() async {
-    final data = await useCase.synchronize();
-    _controller.add(data);
+    try {
+      final data = await useCase.synchronize();
+      _controller.add(data);
+    } catch (e) {
+      debugPrint('synchronizaiton error ${e.toString()}');
+    }
   }
 
   Stream<SynchronizationReport> get stream => _controller.stream;
