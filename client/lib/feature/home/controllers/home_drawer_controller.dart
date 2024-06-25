@@ -11,6 +11,10 @@ class HomeDrawerController extends GetxController {
     Get.toNamed(Routes.files);
   }
 
+  void navigateToPlaylists() {
+    Get.toNamed(Routes.playlists);
+  }
+
   void navigateToMappingPriority() {
     Get.toNamed(Routes.mappingPriority);
   }

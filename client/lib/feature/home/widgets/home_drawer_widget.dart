@@ -34,6 +34,13 @@ class HomeDrawerWidget extends Drawer {
           ),
           ListTile(
             leading: const Icon(Icons.queue_music),
+            title: const Text('Playlists'),
+            onTap: () {
+              _controller.navigateToPlaylists();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.queue_music),
             title: const Text('Files'),
             onTap: () {
               _controller.navigateToFiles();
