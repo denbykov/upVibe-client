@@ -361,4 +361,20 @@ class UpvibeRemoteDatasource {
       rethrow;
     }
   }
+
+  Future<PlaylistDTO> getPlaylist(String id) async {
+    try {
+      await ensureAuthorized();
+      var response = await dio.get('v1/playlists/$id');
+      var json = response.data;
+      return PlaylistDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
 }

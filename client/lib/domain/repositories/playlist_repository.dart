@@ -4,4 +4,6 @@ abstract class PlaylistRepository {
   Future<Playlist> addPlaylist(String url);
 
   Future<List<Playlist>> getPlaylists();
+
+  Future<Playlist> getPlaylist(String id);
 }

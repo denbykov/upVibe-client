@@ -20,4 +20,10 @@ class PlaylistRepositoryImpl extends PlaylistRepository {
     var data = await _upvibeRemoteDatasource.getPlaylists();
     return data.map((dto) => dto.toEntity()).toList();
   }
+
+  @override
+  Future<Playlist> getPlaylist(String id) async {
+    var data = await _upvibeRemoteDatasource.getPlaylist(id);
+    return data.toEntity();
+  }
 }

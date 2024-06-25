@@ -1,4 +1,5 @@
 import 'package:client/feature/file/pages/file_page.dart';
+import 'package:client/feature/file/pages/playlist_page.dart';
 import 'package:client/feature/home/pages/home_page.dart';
 import 'package:get/get.dart';
 
@@ -55,6 +56,11 @@ class Pages {
     GetPage(
       name: Routes.playlists,
       page: () => PlaylistsPage(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: Routes.playlist,
+      page: () => PlaylistPage(),
       binding: HomeBinding(),
     ),
     GetPage(

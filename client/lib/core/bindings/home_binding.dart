@@ -6,6 +6,7 @@ import 'package:client/domain/repositories/assets_repository.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
 import 'package:client/feature/controllers/source_icon_controller.dart';
 import 'package:client/feature/file/controllers/file_controller.dart';
+import 'package:client/feature/file/controllers/playlist_controller.dart';
 import 'package:client/feature/file/controllers/playlists_controller.dart';
 import 'package:client/feature/home/controllers/mapping_priority_controller.dart';
 import 'package:get/get.dart';
@@ -100,5 +101,6 @@ class HomeBinding implements Bindings {
     Get.lazyPut<PlaylistListItemController>(() => PlaylistListItemController());
     Get.lazyPut<FileController>(() => FileController());
     Get.lazyPut<PlaylistsController>(() => PlaylistsController());
+    Get.lazyPut<PlaylistController>(() => PlaylistController());
   }
 }

@@ -6,6 +6,6 @@ import 'package:client/domain/entities/playlist.dart';
 
 class PlaylistListItemController extends GetxController {
   void onTapped(Playlist playlist) {
-    // Get.toNamed(Routes.Playlist, arguments: {'id': playlist.id.toString()});
+    Get.toNamed(Routes.playlist, arguments: {'id': playlist.id.toString()});
   }
 }
