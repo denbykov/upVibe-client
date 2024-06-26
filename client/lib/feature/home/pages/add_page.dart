@@ -24,13 +24,6 @@ class AddPage extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: const Icon(Icons.upload),
-          title: const Text('Upload File'),
-          onTap: () {
-            _controller.navigateToUploadFile();
-          },
-        ),
-        ListTile(
           leading: const Icon(Icons.playlist_add),
           title: const Text('Add Playlist'),
           onTap: () {

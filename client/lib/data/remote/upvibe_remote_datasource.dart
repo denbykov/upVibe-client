@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:client/data/dto/binary_file_dto.dart';
 import 'package:client/data/dto/file_dto.dart';
+import 'package:client/data/dto/playlist_dto.dart';
 import 'package:client/data/dto/etxended_file_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
 import 'package:client/data/dto/tag_dto.dart';
@@ -319,6 +320,56 @@ class UpvibeRemoteDatasource {
       if (ex.type == DioExceptionType.connectionTimeout) {
         throw UpvibeTimeout();
       }
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<PlaylistDTO> addPlaylist(String url) async {
+    try {
+      await ensureAuthorized();
+      var response = await dio.post('v1/playlists', data: {'url': url});
+      var json = response.data;
+      return PlaylistDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<PlaylistDTO>> getPlaylists() async {
+    try {
+      await ensureAuthorized();
+      var response = await dio.get('v1/playlists');
+      var json = response.data;
+      return (json as List)
+          .map((object) => PlaylistDTO.fromJson(object))
+          .toList();
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<PlaylistDTO> getPlaylist(String id) async {
+    try {
+      await ensureAuthorized();
+      var response = await dio.get('v1/playlists/$id');
+      var json = response.data;
+      return PlaylistDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
       if (ex.type == DioExceptionType.badResponse &&
           ex.response!.statusCode == 400) {
         throwErrorFromBadResponse(ex.response!);

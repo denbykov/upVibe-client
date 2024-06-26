@@ -7,10 +7,6 @@ class AddController extends GetxController {
     Get.offAndToNamed(Routes.addFile);
   }
 
-  void navigateToUploadFile() {
-    Get.offAndToNamed(Routes.uploadFille);
-  }
-
   void navigateToAddPlaylist() {
     Get.offAndToNamed(Routes.addPlaylist);
   }

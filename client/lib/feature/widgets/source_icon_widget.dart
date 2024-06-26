@@ -9,11 +9,15 @@ class SourceIconWidget extends StatelessWidget {
 
   final String id;
   final Color color;
+  final double? width;
+  final double? height;
 
   SourceIconWidget({
     super.key,
     required this.id,
     required this.color,
+    this.width,
+    this.height,
   });
 
   @override
@@ -24,6 +28,8 @@ class SourceIconWidget extends StatelessWidget {
       () {
         if (_controller.data.value != null) {
           return SvgPicture(
+            width: width,
+            height: height,
             _controller.data.value!.bytesLoader,
             colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
           );
