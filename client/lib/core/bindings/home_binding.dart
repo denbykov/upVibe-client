@@ -23,6 +23,7 @@ import 'package:client/feature/file/controllers/add_playlist_controller.dart';
 import 'package:client/feature/file/controllers/files_controller.dart';
 import 'package:client/feature/file/controllers/file_list_item_controller.dart';
 import 'package:client/feature/file/controllers/playlist_list_item_controller.dart';
+import 'package:client/feature/file/controllers/custom_tags_controller.dart';
 
 import 'package:client/domain/use_cases/syncronization_use_case.dart';
 
@@ -102,5 +103,6 @@ class HomeBinding implements Bindings {
     Get.lazyPut<FileController>(() => FileController());
     Get.lazyPut<PlaylistsController>(() => PlaylistsController());
     Get.lazyPut<PlaylistController>(() => PlaylistController());
+    Get.lazyPut<CustomTagsController>(() => CustomTagsController());
   }
 }

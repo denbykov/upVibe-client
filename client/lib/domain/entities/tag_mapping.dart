@@ -14,4 +14,22 @@ class TagMapping {
     required this.trackNumber,
     required this.picture,
   });
+
+  TagMapping copyWith({
+    String? title,
+    String? artist,
+    String? album,
+    String? year,
+    String? trackNumber,
+    String? picture,
+  }) {
+    return TagMapping(
+      title: title ?? this.title,
+      artist: artist ?? this.artist,
+      album: album ?? this.album,
+      year: year ?? this.year,
+      trackNumber: trackNumber ?? this.trackNumber,
+      picture: picture ?? this.picture,
+    );
+  }
 }

@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:client/data/dto/short_tags_dto.dart';
 import 'package:client/data/dto/tag_mapping_dto.dart';
 import 'package:client/data/dto/tag_mapping_priority_dto.dart';
+import 'package:client/domain/entities/short_tags.dart';
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/entities/tag_mapping.dart';
 import 'package:client/domain/entities/tag_mapping_priority.dart';
@@ -41,5 +43,11 @@ class TagRepositoryImpl extends TagRepository {
   Future<void> updateTagMappingPriority(TagMappingPriority priority) async {
     await _upvibeDatasource
         .updateTagMappingPriority(TagMappingPriorityDTO.fromEntity(priority));
+  }
+
+  @override
+  Future<void> updateCustomTags(String fileId, ShortTags tags) async {
+    await _upvibeDatasource.updateCustomTags(
+        fileId, ShortTagsDTO.fromEntity(tags));
   }
 }

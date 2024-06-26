@@ -112,6 +112,7 @@ class FilePage extends StatelessWidget {
                 .toList(),
             onPageChanged: _controller.onTitleTagSwapped,
             initialIndex: _controller.titleTagIndex.value,
+            controller: _controller.titleCarouselController,
           ),
           TextTagCarouselSlider(
             label: 'Atirst',
@@ -120,6 +121,7 @@ class FilePage extends StatelessWidget {
                 .toList(),
             onPageChanged: _controller.onArtistTagSwapped,
             initialIndex: _controller.artistTagIndex.value,
+            controller: _controller.artistCarouselController,
           ),
           TextTagCarouselSlider(
             label: 'Album',
@@ -128,6 +130,7 @@ class FilePage extends StatelessWidget {
                 .toList(),
             onPageChanged: _controller.onAlbumTagSwapped,
             initialIndex: _controller.albumTagIndex.value,
+            controller: _controller.albumCarouselController,
           ),
           TextTagCarouselSlider(
             label: 'Year',
@@ -136,6 +139,7 @@ class FilePage extends StatelessWidget {
                 .toList(),
             onPageChanged: _controller.onYearTagSwapped,
             initialIndex: _controller.yearTagIndex.value,
+            controller: _controller.yearCarouselController,
           ),
           TextTagCarouselSlider(
             label: 'Number',
@@ -144,6 +148,7 @@ class FilePage extends StatelessWidget {
                 .toList(),
             onPageChanged: _controller.onNumberTagSwapped,
             initialIndex: _controller.numberTagIndex.value,
+            controller: _controller.numberCarouselController,
           ),
         ],
       ),
@@ -179,6 +184,16 @@ class FilePage extends StatelessWidget {
         body: buildContent(context),
         appBarActions: [
           IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => _controller.onEditTapped(),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).colorScheme.onPrimaryContainer),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).colorScheme.primaryContainer),
+            ),
+          ),
+          IconButton(
             icon: const Icon(Icons.done),
             onPressed: () => _controller.onSaveTapped(),
             style: ButtonStyle(
@@ -199,6 +214,7 @@ class TextTagCarouselSlider extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final String label;
   final int initialIndex;
+  final CarouselController controller;
 
   const TextTagCarouselSlider({
     super.key,
@@ -206,6 +222,7 @@ class TextTagCarouselSlider extends StatelessWidget {
     required this.items,
     required this.label,
     required this.initialIndex,
+    required this.controller,
   });
 
   @override
@@ -223,6 +240,7 @@ class TextTagCarouselSlider extends StatelessWidget {
           ),
           Expanded(
             child: CarouselSlider(
+              carouselController: controller,
               options: CarouselOptions(
                 height: 30,
                 initialPage: initialIndex,

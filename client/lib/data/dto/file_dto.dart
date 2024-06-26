@@ -1,51 +1,6 @@
 import 'package:client/data/dto/source_dto.dart';
+import 'package:client/data/dto/short_tags_dto.dart';
 import 'package:client/domain/entities/file.dart';
-
-class ShortTagsDTO {
-  final String? title;
-  final String? artist;
-  final String? album;
-  final int? year;
-  final int? trackNumber;
-
-  const ShortTagsDTO({
-    required this.title,
-    required this.artist,
-    required this.album,
-    required this.year,
-    required this.trackNumber,
-  });
-
-  factory ShortTagsDTO.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'title': String? title,
-        'artist': String? artist,
-        'album': String? album,
-        'year': int? year,
-        'trackNumber': int? trackNumber,
-      } =>
-        ShortTagsDTO(
-          title: title,
-          artist: artist,
-          album: album,
-          year: year,
-          trackNumber: trackNumber,
-        ),
-      _ => throw const FormatException('Failed to load ShortTagsDTO'),
-    };
-  }
-
-  ShortTags toEntity() {
-    return ShortTags(
-      title: title,
-      artist: artist,
-      album: album,
-      year: year,
-      trackNumber: trackNumber,
-    );
-  }
-}
 
 class FileDTO {
   final String id;

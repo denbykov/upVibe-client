@@ -5,6 +5,7 @@ import 'package:client/data/dto/binary_file_dto.dart';
 import 'package:client/data/dto/file_dto.dart';
 import 'package:client/data/dto/playlist_dto.dart';
 import 'package:client/data/dto/etxended_file_dto.dart';
+import 'package:client/data/dto/short_tags_dto.dart';
 import 'package:client/data/dto/source_dto.dart';
 import 'package:client/data/dto/tag_dto.dart';
 import 'package:client/data/dto/tag_mapping_dto.dart';
@@ -368,6 +369,20 @@ class UpvibeRemoteDatasource {
       var response = await dio.get('v1/playlists/$id');
       var json = response.data;
       return PlaylistDTO.fromJson(json);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      if (ex.type == DioExceptionType.badResponse &&
+          ex.response!.statusCode == 400) {
+        throwErrorFromBadResponse(ex.response!);
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> updateCustomTags(String fileId, ShortTagsDTO tags) async {
+    try {
+      await ensureAuthorized();
+      await dio.post('v1/files/$fileId/custom-tags', data: tags.toJson());
     } on DioException catch (ex) {
       if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
       if (ex.type == DioExceptionType.badResponse &&

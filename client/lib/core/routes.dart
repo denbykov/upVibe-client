@@ -11,4 +11,5 @@ class Routes {
   static const String mappingPriority = '/mappingPriority';
   static const String playlists = '/playlists';
   static const String playlist = '/playlist';
+  static const String customTags = '/customTags';
 }
