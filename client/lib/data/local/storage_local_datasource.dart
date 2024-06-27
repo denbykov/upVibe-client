@@ -2,17 +2,15 @@ import 'dart:io';
 
 import 'package:client/data/dto/tokens_dto.dart';
 import 'package:client/domain/entities/binary_file.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
-import 'package:filesystem_picker/filesystem_picker.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file_selector/file_selector.dart';
 
 class StorageKeys {
   static const String debugToken = 'debugToken';
@@ -111,25 +109,7 @@ class StorageLocalDatasource {
   }
 
   Future<String?> openSelectDirectoryDialog() async {
-    Directory? rootPath;
-
-    if (Platform.isAndroid) {
-      rootPath = Directory('/storage/emulated/0');
-    } else {
-      throw Exception('Unsupported platform');
-    }
-
-    BuildContext context = Get.context!;
-
-    String? path = await FilesystemPicker.open(
-      title: 'Select folder',
-      context: context,
-      rootDirectory: rootPath,
-      fsType: FilesystemType.folder,
-      fileTileSelectMode: FileTileSelectMode.wholeTile,
-    );
-
-    return path;
+    return await getDirectoryPath();
   }
 
   Future<void> storeLastSynchronization(DateTime dateTime) async {
@@ -148,25 +128,13 @@ class StorageLocalDatasource {
   }
 
   Future<String?> openSelectPictureDialog() async {
-    Directory? rootPath;
-
-    if (Platform.isAndroid) {
-      rootPath = Directory('/storage/emulated/0');
-    } else {
-      throw Exception('Unsupported platform');
-    }
-
-    BuildContext context = Get.context!;
-
-    String? path = await FilesystemPicker.open(
-      title: 'Select picture',
-      context: context,
-      rootDirectory: rootPath,
-      fsType: FilesystemType.all,
-      fileTileSelectMode: FileTileSelectMode.wholeTile,
-      // allowedExtensions: ['.jpg', '.jpeg', '.png'],
+    const XTypeGroup typeGroup = XTypeGroup(
+      label: 'images',
+      extensions: <String>['jpg', 'jpeg', 'png'],
     );
+    final XFile? file =
+        await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
 
-    return path;
+    return file?.path;
   }
 }
