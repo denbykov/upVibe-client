@@ -29,10 +29,11 @@ class FilesPage extends StatelessWidget {
       }
 
       return ListView.builder(
-          itemCount: _controller.files.value?.length ?? 0,
-          itemBuilder: (context, index) {
-            return buildFileItem(_controller.files.value![index]);
-          });
+        itemCount: _controller.files.value?.length ?? 0,
+        itemBuilder: (context, index) {
+          return buildFileItem(_controller.files.value![index]);
+        },
+      );
     });
   }
 

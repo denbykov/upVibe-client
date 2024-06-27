@@ -42,6 +42,8 @@ class FileController extends GetxController {
   final numberTagIndex = 0.obs;
   final imageTagIndex = 0.obs;
 
+  final expandHeader = false.obs;
+
   final sources = Rxn<List<Source>>();
 
   final titleCarouselController = CarouselController();
@@ -49,6 +51,7 @@ class FileController extends GetxController {
   final albumCarouselController = CarouselController();
   final yearCarouselController = CarouselController();
   final numberCarouselController = CarouselController();
+  final pictureCarouselController = CarouselController();
 
   Timer? _timer;
 
@@ -300,6 +303,7 @@ class FileController extends GetxController {
       albumCarouselController.jumpToPage(customTagIndex);
       yearCarouselController.jumpToPage(customTagIndex);
       numberCarouselController.jumpToPage(customTagIndex);
+      pictureCarouselController.jumpToPage(customTagIndex);
 
       await loadFile();
       await loadTags();
@@ -308,5 +312,20 @@ class FileController extends GetxController {
       Get.snackbar('Error', 'Something went wrong');
       return;
     }
+  }
+
+  Future<void> onCheckSourceTapped(String source) async {
+    final index = int.parse(source) - 1;
+
+    titleCarouselController.jumpToPage(index);
+    artistCarouselController.jumpToPage(index);
+    albumCarouselController.jumpToPage(index);
+    yearCarouselController.jumpToPage(index);
+    numberCarouselController.jumpToPage(index);
+    pictureCarouselController.jumpToPage(index);
+  }
+
+  void toggleHeader() {
+    expandHeader.value = !expandHeader.value;
   }
 }

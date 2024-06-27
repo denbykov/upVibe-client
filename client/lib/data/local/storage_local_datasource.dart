@@ -146,4 +146,27 @@ class StorageLocalDatasource {
         ? DateTime.parse(lastSynchronization)
         : null;
   }
+
+  Future<String?> openSelectPictureDialog() async {
+    Directory? rootPath;
+
+    if (Platform.isAndroid) {
+      rootPath = Directory('/storage/emulated/0');
+    } else {
+      throw Exception('Unsupported platform');
+    }
+
+    BuildContext context = Get.context!;
+
+    String? path = await FilesystemPicker.open(
+      title: 'Select picture',
+      context: context,
+      rootDirectory: rootPath,
+      fsType: FilesystemType.all,
+      fileTileSelectMode: FileTileSelectMode.wholeTile,
+      // allowedExtensions: ['.jpg', '.jpeg', '.png'],
+    );
+
+    return path;
+  }
 }

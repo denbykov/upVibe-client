@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:client/domain/entities/custom_tags_update_result.dart';
 import 'package:client/domain/entities/short_tags.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
+import 'package:client/domain/repositories/storage_repository.dart';
 import 'package:client/exceptions/upvibe_error.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,10 @@ class CustomTagsController extends GetxController {
   late TextEditingController yearFieldController;
   late TextEditingController numberFieldController;
 
+  String? picturePath;
+
   final TagRepository _tagRepository = Get.find<TagRepository>();
+  final StorageRepository _storageRepository = Get.find<StorageRepository>();
 
   @override
   void onInit() async {
@@ -53,7 +57,7 @@ class CustomTagsController extends GetxController {
       await _tagRepository.updateCustomTags(_fileId, tags);
       final result = CustomTagsUpdateResult(
         textTagsChanged: true,
-        pictureTagChanged: false,
+        pictureTagChanged: picturePath != null,
       );
       Get.back(result: result);
     } on UpvibeError catch (e) {
@@ -61,5 +65,11 @@ class CustomTagsController extends GetxController {
       Get.snackbar('Error', 'Something went wrong');
       return;
     }
+  }
+
+  Future<void> onSetPicturePressed() async {
+    final result = await _storageRepository.openSelectPictureDialog();
+    if (result == null) return;
+    picturePath = result;
   }
 }

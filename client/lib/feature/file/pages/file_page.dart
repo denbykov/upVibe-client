@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:client/domain/entities/file.dart';
+import 'package:client/domain/entities/tag.dart';
 import 'package:client/feature/widgets/source_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,10 +16,27 @@ class FilePage extends StatelessWidget {
 
   FilePage({super.key});
 
-  Widget buildHeader(File file, BuildContext context) {
+  Widget buildHeader(BuildContext context) {
+    return Column(
+      children: [
+        buildFirstHeaderLine(context, _controller.extendedFile.value!.file),
+        buildCheckSourceHeader(_controller.tags.value!, context),
+        buildColapseHeaderButton(context),
+      ],
+    );
+  }
+
+  Container buildFirstHeaderLine(BuildContext context, File file) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+          top: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        ),
       ),
       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
       child: Row(
@@ -91,6 +109,7 @@ class FilePage extends StatelessWidget {
                 items: items,
                 onPageChanged: _controller.onImageTagSwapped,
                 initialIndex: _controller.imageTagIndex.value,
+                controller: _controller.pictureCarouselController,
               );
             }),
           ),
@@ -155,6 +174,42 @@ class FilePage extends StatelessWidget {
     );
   }
 
+  Widget buildCheckSourceHeader(List<Tag> tags, BuildContext context) {
+    return Container(
+      height: 66,
+      width: double.maxFinite,
+      padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      child: Center(
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: tags.length,
+          itemBuilder: (context, index) {
+            return buildCheckoutSourceWidget(tags[index]);
+          },
+        ),
+      ),
+    );
+  }
+
+  InkWell buildCheckoutSourceWidget(Tag tag) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(36.0),
+      onTap: () => {
+        _controller.onCheckSourceTapped(tag.source),
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SourceIconWidget(
+          width: 28,
+          height: 28,
+          color: Get.theme.colorScheme.onSecondaryContainer,
+          id: tag.source,
+        ),
+      ),
+    );
+  }
+
   Widget buildContent(BuildContext context) {
     return Obx(() {
       if (_controller.extendedFile.value != null &&
@@ -162,7 +217,14 @@ class FilePage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildHeader(_controller.extendedFile.value!.file, context),
+            ClipRect(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                child: _controller.expandHeader.isFalse
+                    ? buildExpandHeaderButton(context)
+                    : buildHeader(context),
+              ),
+            ),
             buildTagsSection(context),
           ],
         );
@@ -170,6 +232,68 @@ class FilePage extends StatelessWidget {
         return const SizedBox.shrink();
       }
     });
+  }
+
+  Container buildExpandHeaderButton(BuildContext context) {
+    return Container(
+      height: 46,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+          bottom: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      child: InkWell(
+        onTap: () => {
+          _controller.toggleHeader(),
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Icon(
+            Icons.expand_more,
+            color: Get.theme.colorScheme.secondary,
+            size: 28.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container buildColapseHeaderButton(BuildContext context) {
+    return Container(
+      height: 46,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+          bottom: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      child: InkWell(
+        onTap: () => {
+          _controller.toggleHeader(),
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Icon(
+            Icons.expand_less,
+            color: Get.theme.colorScheme.secondary,
+            size: 28.0,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -350,17 +474,20 @@ class ImageTagCarouselSlider extends StatelessWidget {
   final Function(int index) onPageChanged;
   final List<Map<String, dynamic>> items;
   final int initialIndex;
+  final CarouselController controller;
 
   const ImageTagCarouselSlider({
     super.key,
     required this.onPageChanged,
     required this.items,
     required this.initialIndex,
+    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
+      carouselController: controller,
       options: CarouselOptions(
         initialPage: initialIndex,
         onPageChanged: (index, reason) {

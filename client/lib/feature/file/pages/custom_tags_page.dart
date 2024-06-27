@@ -27,6 +27,17 @@ class CustomTagsPage extends StatelessWidget {
             buildEditField(context, 'Year', _controller.yearFieldController),
             buildEditField(
                 context, 'Number', _controller.numberFieldController),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  await _controller.onSetPicturePressed();
+                },
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(color: Colors.white)),
+                child: const Text('Set picuture'),
+              ),
+            )
           ],
         );
       },
