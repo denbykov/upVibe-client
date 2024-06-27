@@ -1,13 +1,17 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:client/core/services/synchronization_service.dart';
+import 'package:client/domain/entities/custom_tags_update_result.dart';
 import 'package:client/domain/entities/extended_file.dart';
+import 'package:client/domain/entities/source.dart';
 import 'package:client/domain/entities/synchronization_report.dart';
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/entities/tag_mapping.dart';
 import 'package:client/domain/repositories/file_repository.dart';
 import 'package:client/domain/repositories/storage_repository.dart';
 import 'package:client/domain/repositories/tag_repository.dart';
+import 'package:client/domain/repositories/assets_repository.dart';
 import 'package:client/exceptions/upvibe_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +42,17 @@ class FileController extends GetxController {
   final numberTagIndex = 0.obs;
   final imageTagIndex = 0.obs;
 
+  final expandHeader = false.obs;
+
+  final sources = Rxn<List<Source>>();
+
+  final titleCarouselController = CarouselController();
+  final artistCarouselController = CarouselController();
+  final albumCarouselController = CarouselController();
+  final yearCarouselController = CarouselController();
+  final numberCarouselController = CarouselController();
+  final pictureCarouselController = CarouselController();
+
   Timer? _timer;
 
   StreamSubscription<SynchronizationReport>? _synchronizationSubscription;
@@ -62,6 +77,8 @@ class FileController extends GetxController {
 
     await loadFile();
     await loadTags();
+
+    sources.value = await Get.find<AssetsRepository>().getSources();
 
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
@@ -225,5 +242,100 @@ class FileController extends GetxController {
       Get.snackbar('Error', 'Something went wrong');
       return;
     }
+  }
+
+  Future<void> onEditTapped() async {
+    if (tags.value == null) {
+      return;
+    }
+
+    final tagsData = {
+      'fileId': _fileId,
+      'title': tags.value![titleTagIndex.value].title,
+      'artist': tags.value![artistTagIndex.value].artist,
+      'album': tags.value![albumTagIndex.value].album,
+      'year': tags.value![yearTagIndex.value].year,
+      'number': tags.value![numberTagIndex.value].trackNumber,
+    };
+
+    var result = await Get.toNamed('/customTags', arguments: tagsData);
+    if (result == null) {
+      return;
+    }
+
+    if (result is! CustomTagsUpdateResult) {
+      throw Exception('Invalid result type');
+    }
+
+    TagMapping mapping = TagMapping(
+      title: '${titleTagIndex.value + 1}',
+      artist: '${artistTagIndex.value + 1}',
+      album: '${albumTagIndex.value + 1}',
+      year: '${yearTagIndex.value + 1}',
+      trackNumber: '${numberTagIndex.value + 1}',
+      picture: '${imageTagIndex.value + 1}',
+    );
+
+    final customSource = sources.value!.firstWhere(
+      (element) => element.source == 'custom',
+    );
+
+    if (result.textTagsChanged) {
+      if (sources.value == null) {
+        throw Exception('Sources are not loaded');
+      }
+
+      mapping = mapping.copyWith(
+        title: customSource.id,
+        artist: customSource.id,
+        album: customSource.id,
+        year: customSource.id,
+        trackNumber: customSource.id,
+      );
+    }
+
+    if (result.pictureTagChanged) {
+      if (sources.value == null) {
+        throw Exception('Sources are not loaded');
+      }
+
+      mapping = mapping.copyWith(
+        picture: customSource.id,
+      );
+    }
+
+    try {
+      await _tagRepository.updateMapping(_fileId, mapping);
+      final customTagIndex = int.parse(customSource.id) - 1;
+
+      titleCarouselController.jumpToPage(customTagIndex);
+      artistCarouselController.jumpToPage(customTagIndex);
+      albumCarouselController.jumpToPage(customTagIndex);
+      yearCarouselController.jumpToPage(customTagIndex);
+      numberCarouselController.jumpToPage(customTagIndex);
+      pictureCarouselController.jumpToPage(customTagIndex);
+
+      await loadFile();
+      await loadTags();
+    } on UpvibeError catch (e) {
+      debugPrint('${e.toString()}: ${e.errMsg()}');
+      Get.snackbar('Error', 'Something went wrong');
+      return;
+    }
+  }
+
+  Future<void> onCheckSourceTapped(String source) async {
+    final index = int.parse(source) - 1;
+
+    titleCarouselController.jumpToPage(index);
+    artistCarouselController.jumpToPage(index);
+    albumCarouselController.jumpToPage(index);
+    yearCarouselController.jumpToPage(index);
+    numberCarouselController.jumpToPage(index);
+    pictureCarouselController.jumpToPage(index);
+  }
+
+  void toggleHeader() {
+    expandHeader.value = !expandHeader.value;
   }
 }

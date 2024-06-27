@@ -72,4 +72,9 @@ class StorageRepositoryImpl extends StorageRepository {
   DateTime? getLastSynchronization() {
     return _datasource.getLastSynchronization();
   }
+
+  @override
+  Future<String?> openSelectPictureDialog() async {
+    return await _datasource.openSelectPictureDialog();
+  }
 }

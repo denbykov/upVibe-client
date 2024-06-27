@@ -1,3 +1,4 @@
+import 'package:client/domain/entities/source.dart';
 import 'package:client/domain/repositories/assets_repository.dart';
 
 import 'package:client/data/remote/upvibe_remote_datasource.dart';
@@ -26,5 +27,11 @@ class AssetsRepositoryImpl extends AssetsRepository {
   @override
   SvgPicture getIconBySourceId(String id) {
     return _storageDatasource.getIconBySourceId(id);
+  }
+
+  @override
+  Future<List<Source>> getSources() async {
+    final sources = await _upvibeDatasource.getSources();
+    return sources.map((dto) => dto.toEntity()).toList();
   }
 }

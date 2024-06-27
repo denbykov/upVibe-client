@@ -22,4 +22,6 @@ abstract class StorageRepository {
   Future<void> storeLastSynchronization(DateTime dateTime);
 
   DateTime? getLastSynchronization();
+
+  Future<String?> openSelectPictureDialog();
 }

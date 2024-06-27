@@ -1,4 +1,3 @@
-import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,21 +13,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilesystemPickerDefaultOptions(
-      fileTileSelectMode: FileTileSelectMode.wholeTile,
-      theme: FilesystemPickerTheme(
-        topBar: FilesystemPickerTopBarThemeData(
-          backgroundColor: Colors.red[700],
-        ),
-      ),
-      child: GetMaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-        darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-        themeMode: inBrightMode ? ThemeMode.light : ThemeMode.dark,
-        initialRoute: Routes.login,
-        getPages: Pages.pages,
-      ),
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      themeMode: inBrightMode ? ThemeMode.light : ThemeMode.dark,
+      initialRoute: Routes.login,
+      getPages: Pages.pages,
     );
   }
 }

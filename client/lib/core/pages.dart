@@ -14,6 +14,7 @@ import 'package:client/feature/file/pages/add_file_page.dart';
 import 'package:client/feature/file/pages/add_playlist_page.dart';
 import 'package:client/feature/file/pages/files_page.dart';
 import 'package:client/feature/file/pages/playlists_page.dart';
+import 'package:client/feature/file/pages/custom_tags_page.dart';
 import 'package:client/feature/home/pages/mapping_priority_page.dart';
 
 class Pages {
@@ -76,6 +77,11 @@ class Pages {
     GetPage(
       name: Routes.mappingPriority,
       page: () => MappingPriorityPage(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: Routes.customTags,
+      page: () => CustomTagsPage(),
       binding: HomeBinding(),
     )
   ];
