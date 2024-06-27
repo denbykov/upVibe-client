@@ -55,9 +55,15 @@ class CustomTagsController extends GetxController {
     );
     try {
       await _tagRepository.updateCustomTags(_fileId, tags);
+
+      final pictureUpdated = picturePath != null;
+      if (pictureUpdated) {
+        await _tagRepository.uploadPicture(picturePath!, _fileId);
+      }
+
       final result = CustomTagsUpdateResult(
         textTagsChanged: true,
-        pictureTagChanged: picturePath != null,
+        pictureTagChanged: pictureUpdated,
       );
       Get.back(result: result);
     } on UpvibeError catch (e) {

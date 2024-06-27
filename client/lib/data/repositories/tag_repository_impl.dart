@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:client/data/dto/short_tags_dto.dart';
 import 'package:client/data/dto/tag_mapping_dto.dart';
 import 'package:client/data/dto/tag_mapping_priority_dto.dart';
+import 'package:client/data/local/storage_local_datasource.dart';
 import 'package:client/domain/entities/short_tags.dart';
 import 'package:client/domain/entities/tag.dart';
 import 'package:client/domain/entities/tag_mapping.dart';
@@ -16,6 +17,9 @@ import 'package:get/get.dart';
 class TagRepositoryImpl extends TagRepository {
   final UpvibeRemoteDatasource _upvibeDatasource =
       Get.find<UpvibeRemoteDatasource>();
+
+  final StorageLocalDatasource _storageLocalDatasource =
+      Get.find<StorageLocalDatasource>();
   @override
   Future<List<Tag>> getTagsForFile(String id) async {
     final tags = await _upvibeDatasource.getTagsForFile(id);
@@ -49,5 +53,11 @@ class TagRepositoryImpl extends TagRepository {
   Future<void> updateCustomTags(String fileId, ShortTags tags) async {
     await _upvibeDatasource.updateCustomTags(
         fileId, ShortTagsDTO.fromEntity(tags));
+  }
+
+  @override
+  Future<void> uploadPicture(String path, String fileId) async {
+    final data = await _storageLocalDatasource.readFile(path);
+    await _upvibeDatasource.uploadPicture(data, fileId);
   }
 }

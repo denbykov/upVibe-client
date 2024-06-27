@@ -17,4 +17,6 @@ abstract class TagRepository {
   Future<void> updateTagMappingPriority(TagMappingPriority priority);
 
   Future<void> updateCustomTags(String fileId, ShortTags tags);
+
+  Future<void> uploadPicture(String path, String fileId);
 }

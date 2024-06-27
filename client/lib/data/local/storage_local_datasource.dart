@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:client/data/dto/tokens_dto.dart';
 import 'package:client/domain/entities/binary_file.dart';
@@ -136,5 +137,9 @@ class StorageLocalDatasource {
         await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
 
     return file?.path;
+  }
+
+  Future<Uint8List> readFile(String path) async {
+    return await File(path).readAsBytes();
   }
 }

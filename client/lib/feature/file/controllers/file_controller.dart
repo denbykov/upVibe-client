@@ -294,6 +294,16 @@ class FileController extends GetxController {
       );
     }
 
+    if (result.pictureTagChanged) {
+      if (sources.value == null) {
+        throw Exception('Sources are not loaded');
+      }
+
+      mapping = mapping.copyWith(
+        picture: customSource.id,
+      );
+    }
+
     try {
       await _tagRepository.updateMapping(_fileId, mapping);
       final customTagIndex = int.parse(customSource.id) - 1;

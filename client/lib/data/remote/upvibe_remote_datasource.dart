@@ -392,4 +392,14 @@ class UpvibeRemoteDatasource {
       rethrow;
     }
   }
+
+  Future<void> uploadPicture(Uint8List data, String fileId) async {
+    try {
+      await ensureAuthorized();
+      await dio.post('v1/files/$fileId/custom-tags/picture', data: data);
+    } on DioException catch (ex) {
+      if (ex.type == DioExceptionType.connectionTimeout) throw UpvibeTimeout();
+      rethrow;
+    }
+  }
 }
